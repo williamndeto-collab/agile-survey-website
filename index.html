@@ -1,2102 +1,275 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Agile Methodology and Project Performance on ICT Projects in the Ministry of Transport, Kenya survey questionnaire."
-    />
-    <title>Agile Methodology and Project Performance Survey</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-      :root {
-        --primary: #0d4d73;
-        --primary-dark: #08344d;
-        --primary-soft: #dfeef8;
-        --accent: #2c7a9c;
-        --success: #1e8e5a;
-        --warning: #e7a72a;
-        --danger: #d95d5d;
-        --neutral: #eef2f7;
-        --text: #1d2a36;
-        --muted: #5d6b7b;
-        --white: #ffffff;
-        --shadow: 0 10px 30px rgba(12, 38, 55, 0.12);
-        --radius: 18px;
-        --transition: 0.28s ease;
-        --progress: 0%;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      html {
-        scroll-behavior: smooth;
-      }
-
-      body {
-        margin: 0;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(180deg, #edf4f9 0%, #f8fafc 100%);
-        color: var(--text);
-      }
-
-      button,
-      input,
-      select,
-      textarea {
-        font: inherit;
-      }
-
-      .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-      }
-
-      .app-shell {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .topbar {
-        background: linear-gradient(135deg, var(--primary) 0%, #0f5f8f 100%);
-        color: var(--white);
-        box-shadow: 0 6px 18px rgba(13, 77, 115, 0.16);
-      }
-
-      .topbar-inner {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 1rem 1.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-      }
-
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 0.9rem;
-      }
-
-      .brand-mark {
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.12);
-        display: grid;
-        place-items: center;
-        font-size: 1.4rem;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-      }
-
-      .brand h1 {
-        margin: 0;
-        font-size: clamp(1.1rem, 2vw, 1.55rem);
-        font-weight: 700;
-        letter-spacing: 0.02em;
-      }
-
-      .status-pill {
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        color: var(--white);
-        padding: 0.45rem 0.8rem;
-        border-radius: 999px;
-        font-size: 0.82rem;
-        font-weight: 600;
-      }
-
-      .page-container {
-        max-width: 1200px;
-        width: min(92%, 1200px);
-        margin: 2rem auto 3rem;
-        flex: 1;
-        position: relative;
-      }
-
-      .screen {
-        display: none;
-        animation: fadeInUp 0.5s ease;
-      }
-
-      .screen.active {
-        display: block;
-      }
-
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(18px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .card {
-        background: var(--white);
-        border: 1px solid rgba(18, 70, 102, 0.08);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-      }
-
-      .welcome-card {
-        padding: clamp(1.25rem, 2vw, 2.2rem);
-        overflow: hidden;
-      }
-
-      .welcome-grid {
-        display: grid;
-        grid-template-columns: 1.3fr 0.7fr;
-        gap: 1.2rem;
-        align-items: center;
-      }
-
-      .eyebrow {
-        margin: 0 0 0.7rem;
-        color: var(--accent);
-        font-size: 0.8rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        font-weight: 700;
-      }
-
-      h2 {
-        margin: 0 0 1rem;
-        line-height: 1.2;
-        font-size: clamp(2rem, 4vw, 3rem);
-      }
-
-      .welcome-card p {
-        margin: 0 0 1rem;
-        font-size: 1.02rem;
-        color: var(--muted);
-        line-height: 1.7;
-      }
-
-      .welcome-meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        margin-top: 1.5rem;
-      }
-
-      .meta-item {
-        background: var(--primary-soft);
-        color: var(--primary-dark);
-        padding: 0.7rem 0.9rem;
-        border-radius: 14px;
-        font-weight: 600;
-        font-size: 0.9rem;
-      }
-
-      .welcome-illustration {
-        background: linear-gradient(180deg, rgba(13, 77, 115, 0.05), rgba(13, 77, 115, 0.12));
-        border: 1px solid rgba(13, 77, 115, 0.08);
-        padding: 1.7rem;
-        border-radius: 24px;
-        height: 100%;
-        display: grid;
-        place-items: center;
-      }
-
-      .illustration-box {
-        width: min(100%, 360px);
-        aspect-ratio: 1;
-        border-radius: 24px;
-        position: relative;
-        background: linear-gradient(135deg, #e9f3fa 0%, #dbeef8 100%);
-        border: 1px solid rgba(17, 97, 138, 0.12);
-        overflow: hidden;
-      }
-
-      .chart-bars {
-        position: absolute;
-        inset: auto 18% 22% 12%;
-        display: flex;
-        align-items: end;
-        justify-content: space-between;
-        gap: 0.8rem;
-        height: 44%;
-      }
-
-      .bar {
-        width: 15%;
-        border-radius: 12px 12px 0 0;
-        background: linear-gradient(180deg, var(--accent), var(--primary));
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
-      }
-
-      .bar:nth-child(1) { height: 35%; }
-      .bar:nth-child(2) { height: 58%; }
-      .bar:nth-child(3) { height: 72%; }
-      .bar:nth-child(4) { height: 86%; }
-      .bar:nth-child(5) { height: 100%; }
-
-      .bubble {
-        position: absolute;
-        border-radius: 50%;
-        background: rgba(44, 122, 156, 0.12);
-      }
-
-      .bubble.one { width: 150px; height: 150px; right: -20px; top: 20px; }
-      .bubble.two { width: 110px; height: 110px; left: -18px; bottom: 24px; }
-      .bubble.three { width: 78px; height: 78px; right: 22%; top: 12%; }
-
-      .survey-shell {
-        background: rgba(255, 255, 255, 0.7);
-        border: 1px solid rgba(18, 70, 102, 0.08);
-        border-radius: 24px;
-        overflow: hidden;
-        box-shadow: var(--shadow);
-      }
-
-      .survey-header {
-        background: linear-gradient(135deg, rgba(13, 77, 115, 0.95), rgba(44, 122, 156, 0.95));
-        color: var(--white);
-        padding: 1.1rem 1.4rem 1.15rem;
-      }
-
-      .survey-header-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 0.75rem;
-      }
-
-      .survey-header h3 {
-        margin: 0;
-        font-size: clamp(1.15rem, 2vw, 1.55rem);
-      }
-
-      .progress-wrap {
-        display: grid;
-        gap: 0.5rem;
-      }
-
-      .progress-label {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.82rem;
-        color: rgba(255, 255, 255, 0.82);
-      }
-
-      .progress-bar {
-        position: relative;
-        width: 100%;
-        height: 12px;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.18);
-        overflow: hidden;
-      }
-
-      .progress-bar-fill {
-        height: 100%;
-        width: var(--progress);
-        border-radius: inherit;
-        background: linear-gradient(90deg, #9fe9ba, #dff8e8);
-        transition: width 0.45s ease;
-      }
-
-      .survey-body {
-        padding: clamp(1.2rem, 2vw, 2rem);
-      }
-
-      .section-cluster {
-        display: grid;
-        gap: 1.1rem;
-      }
-
-      .question-card {
-        background: #f8fafc;
-        border: 1px solid rgba(13, 77, 115, 0.08);
-        border-radius: 18px;
-        padding: 1rem; 
-      }
-
-      .demographic-question {
-        display: grid;
-        gap: 0.7rem;
-      }
-
-      .question-label {
-        display: block;
-        font-weight: 700;
-        margin-bottom: 0.2rem;
-      }
-
-      .question-subtext {
-        font-size: 0.82rem;
-        color: var(--muted);
-      }
-
-      .field {
-        width: 100%;
-        padding: 0.8rem 0.9rem;
-        border: 1px solid rgba(29, 42, 54, 0.16);
-        border-radius: 12px;
-        background: var(--white);
-        color: var(--text);
-        transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
-      }
-
-      .field:focus,
-      .likert-card:focus-visible,
-      .primary-btn:focus-visible,
-      .secondary-btn:focus-visible,
-      .icon-btn:focus-visible {
-        outline: 3px solid rgba(44, 122, 156, 0.25);
-        outline-offset: 2px;
-      }
-
-      .field:focus {
-        border-color: var(--accent);
-        box-shadow: 0 0 0 4px rgba(44, 122, 156, 0.08);
-      }
-
-      .likert-options {
-        display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 0.7rem;
-      }
-
-      .likert-card {
-        position: relative;
-        border: 1px solid rgba(13, 77, 115, 0.14);
-        background: var(--white);
-        border-radius: 14px;
-        padding: 0.8rem 0.55rem;
-        cursor: pointer;
-        text-align: center;
-        display: grid;
-        gap: 0.35rem;
-        transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), background var(--transition);
-        min-height: 92px;
-      }
-
-      .likert-card:hover {
-        transform: translateY(-3px);
-        border-color: rgba(13, 77, 115, 0.23);
-        box-shadow: 0 8px 18px rgba(13, 77, 115, 0.1);
-      }
-
-      .likert-card.selected {
-        background: linear-gradient(180deg, rgba(13, 77, 115, 0.08), rgba(44, 122, 156, 0.12));
-        border-color: var(--primary);
-        box-shadow: 0 8px 18px rgba(13, 77, 115, 0.12);
-      }
-
-      .likert-score {
-        font-weight: 800;
-        font-size: clamp(1.1rem, 2vw, 1.5rem);
-        color: var(--primary);
-      }
-
-      .likert-label {
-        font-size: 0.8rem;
-        color: var(--muted);
-        line-height: 1.35;
-      }
-
-      .survey-actions {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        margin-top: 1.5rem;
-      }
-
-      .primary-btn,
-      .secondary-btn,
-      .ghost-btn,
-      .icon-btn {
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
-        font-weight: 700;
-      }
-
-      .primary-btn,
-      .secondary-btn,
-      .ghost-btn {
-        padding: 0.8rem 1.2rem;
-      }
-
-      .primary-btn {
-        background: linear-gradient(135deg, var(--primary), var(--accent));
-        color: var(--white);
-        box-shadow: 0 10px 18px rgba(13, 77, 115, 0.22);
-      }
-
-      .secondary-btn {
-        background: var(--primary-dark);
-        color: var(--white);
-      }
-
-      .ghost-btn {
-        background: rgba(13, 77, 115, 0.08);
-        color: var(--primary-dark);
-      }
-
-      .primary-btn:hover,
-      .secondary-btn:hover,
-      .ghost-btn:hover,
-      .icon-btn:hover {
-        transform: translateY(-2px);
-      }
-
-      .button-row {
-        display: flex;
-        gap: 0.8rem;
-        flex-wrap: wrap;
-      }
-
-      .results-card {
-        padding: clamp(1.2rem, 2vw, 2rem);
-      }
-
-      .summary-grid {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 1rem;
-        margin: 1.25rem 0 1.8rem;
-      }
-
-      .metric-card {
-        background: linear-gradient(180deg, #f9fbfd, #f2f7fb);
-        border: 1px solid rgba(13, 77, 115, 0.08);
-        border-radius: 18px;
-        padding: 1rem;
-      }
-
-      .metric-label {
-        font-size: 0.72rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--muted);
-        font-weight: 700;
-      }
-
-      .metric-value {
-        margin-top: 0.7rem;
-        font-size: clamp(1.5rem, 3vw, 2.2rem);
-        font-weight: 800;
-        color: var(--primary-dark);
-      }
-
-      .metric-sub {
-        font-size: 0.82rem;
-        color: var(--muted);
-        margin-top: 0.2rem;
-      }
-
-      .charts-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1.2rem;
-        margin-bottom: 1.6rem;
-      }
-
-      .chart-panel {
-        padding: 1rem;
-        background: #fbfdff;
-        border: 1px solid rgba(13, 77, 115, 0.08);
-        border-radius: 18px;
-      }
-
-      .chart-panel canvas {
-        width: 100% !important;
-        max-height: 320px;
-      }
-
-      .chart-panel.full {
-        grid-column: 1 / -1;
-      }
-
-      .key-findings {
-        background: linear-gradient(180deg, rgba(13, 77, 115, 0.04), rgba(44, 122, 156, 0.06));
-        border: 1px solid rgba(13, 77, 115, 0.08);
-        border-radius: 18px;
-        padding: 1.1rem;
-        margin-bottom: 1.4rem;
-      }
-
-      .key-findings h4,
-      .table-wrap h4 {
-        margin: 0 0 0.9rem;
-        font-size: 1.15rem;
-      }
-
-      .key-findings ul {
-        margin: 0;
-        padding-left: 1.1rem;
-        color: var(--text);
-      }
-
-      .key-findings li {
-        line-height: 1.8;
-      }
-
-      .table-wrap {
-        margin-top: 1.3rem;
-        overflow: auto;
-        border-radius: 18px;
-        border: 1px solid rgba(13, 77, 115, 0.08);
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        min-width: 760px;
-        background: var(--white);
-      }
-
-      th,
-      td {
-        padding: 0.8rem 0.75rem;
-        border-bottom: 1px solid rgba(13, 77, 115, 0.08);
-        text-align: left;
-      }
-
-      th {
-        background: #f5f9fc;
-        font-size: 0.8rem;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-
-      .thankyou-card {
-        padding: clamp(1.4rem, 2vw, 2.4rem);
-        text-align: center;
-      }
-
-      .success-badge {
-        width: 72px;
-        height: 72px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #2ab98d, #1e8e5a);
-        color: var(--white);
-        font-size: 2rem;
-        display: grid;
-        place-items: center;
-        margin: 0 auto 1rem;
-        box-shadow: 0 16px 28px rgba(30, 142, 90, 0.22);
-        animation: pulse 1.5s ease-in-out infinite alternate;
-      }
-
-      @keyframes pulse {
-        from { transform: scale(1); }
-        to { transform: scale(1.08); }
-      }
-
-      .thankyou-card h3 {
-        margin: 0 0 1rem;
-        font-size: clamp(1.6rem, 3vw, 2.5rem);
-      }
-
-      .respondent-box {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.7rem;
-        background: var(--primary-soft);
-        color: var(--primary-dark);
-        padding: 0.8rem 1rem;
-        border-radius: 999px;
-        font-weight: 700;
-        margin-bottom: 1.2rem;
-      }
-
-      .timestamp {
-        color: var(--muted);
-        margin-bottom: 1.4rem;
-      }
-
-      .footer {
-        margin-top: auto;
-        padding: 1rem 0 2rem;
-      }
-
-      .footer-inner {
-        max-width: 1200px;
-        width: min(92%, 1200px);
-        margin: 0 auto;
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      .admin-trigger {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      .modal {
-        position: fixed;
-        inset: 0;
-        background: rgba(8, 18, 26, 0.55);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 50;
-        padding: 1rem;
-      }
-
-      .modal.active {
-        display: flex;
-      }
-
-      .modal-card {
-        width: min(90vw, 560px);
-        background: var(--white);
-        border-radius: 22px;
-        box-shadow: 0 22px 50px rgba(8, 18, 26, 0.26);
-        padding: 1.2rem;
-      }
-
-      .modal-card h3 {
-        margin-top: 0;
-      }
-
-      .admin-grid {
-        display: grid;
-        gap: 1rem;
-      }
-
-      .admin-summary-min {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.8rem;
-      }
-
-      .mini-stat {
-        background: #f8fafc;
-        border: 1px solid rgba(13, 77, 115, 0.08);
-        border-radius: 14px;
-        padding: 0.8rem;
-      }
-
-      .mini-stat strong {
-        display: block;
-        font-size: 1.5rem;
-        color: var(--primary-dark);
-      }
-
-      .muted {
-        color: var(--muted);
-      }
-
-      .warning-banner {
-        background: rgba(231, 167, 42, 0.1);
-        color: #8a5a00;
-        border: 1px solid rgba(231, 167, 42, 0.2);
-        border-radius: 12px;
-        padding: 0.8rem 0.9rem;
-        font-size: 0.9rem;
-      }
-
-      .sr-only-link {
-        position: absolute;
-        left: -9999px;
-      }
-
-      @media (max-width: 900px) {
-        .welcome-grid,
-        .charts-grid,
-        .summary-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .likert-options {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-      }
-
-      @media (max-width: 640px) {
-        .topbar-inner,
-        .survey-header-top,
-        .survey-actions {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .brand {
-          justify-content: center;
-        }
-
-        .status-pill {
-          align-self: center;
-        }
-
-        .button-row {
-          width: 100%;
-        }
-
-        .primary-btn,
-        .secondary-btn,
-        .ghost-btn {
-          width: 100%;
-        }
-
-        .likert-options {
-          grid-template-columns: 1fr;
-        }
-
-        .admin-summary-min {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="app-shell">
-      <header class="topbar" aria-label="Survey header">
-        <div class="topbar-inner">
-          <div class="brand">
-            <div class="brand-mark" aria-hidden="true">📊</div>
-            <h1>Agile Methodology Survey</h1>
-          </div>
-          <div class="status-pill">Research Study</div>
-        </div>
-      </header>
-
-      <main class="page-container">
-        <section id="welcomeScreen" class="screen active" aria-live="polite">
-          <div class="card welcome-card">
-            <div class="welcome-grid">
-              <div>
-                <p class="eyebrow">Ministry of Transport, Kenya</p>
-                <h2>Agile Methodology and Project Performance on ICT Projects</h2>
-                <p>
-                  This questionnaire is designed to assess the adoption of agile methodologies and
-                  the impact on ICT project performance in the Ministry of Transport, Kenya. Your
-                  responses will be stored locally for analysis and reporting.
-                </p>
-                <p>
-                  Participation is voluntary, and all responses will be treated confidentially for
-                  research purposes only.
-                </p>
-                <div class="welcome-meta">
-                  <div class="meta-item">Section A: Demographic Information</div>
-                  <div class="meta-item">Section B: Agile Adoption</div>
-                  <div class="meta-item">Section C: Project Performance</div>
-                </div>
-                <div class="button-row" style="margin-top: 1.5rem;">
-                  <button id="startSurveyBtn" class="primary-btn" type="button">
-                    Start Survey
-                  </button>
-                </div>
-              </div>
-
-              <div class="welcome-illustration" aria-hidden="true">
-                <div class="illustration-box">
-                  <div class="bubble one"></div>
-                  <div class="bubble two"></div>
-                  <div class="bubble three"></div>
-                  <div class="chart-bars">
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="surveyScreen" class="screen" aria-live="polite">
-          <div class="survey-shell">
-            <div class="survey-header">
-              <div class="survey-header-top">
-                <h3 id="sectionHeading">Section A</h3>
-                <span id="sectionCounter" class="status-pill">1 / 4</span>
-              </div>
-              <div class="progress-wrap">
-                <div class="progress-label">
-                  <span>Progress</span>
-                  <span id="progressText">25%</span>
-                </div>
-                <div class="progress-bar" aria-label="Questionnaire completion progress">
-                  <div id="progressBarFill" class="progress-bar-fill"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="survey-body">
-              <div id="questionContainer" class="section-cluster"></div>
-
-              <div class="survey-actions">
-                <button id="prevBtn" class="ghost-btn" type="button">Previous</button>
-                <div class="button-row">
-                  <button id="nextBtn" class="primary-btn" type="button">Next</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="resultsScreen" class="screen" aria-live="polite">
-          <div class="card results-card">
-            <div class="survey-header" style="margin: -1.2rem -1.2rem 1.2rem; border-radius: 20px 20px 0 0;">
-              <div class="survey-header-top">
-                <h3>Results Dashboard</h3>
-                <span class="status-pill">Automatic Reporting</span>
-              </div>
-            </div>
-
-            <div id="summaryCards" class="summary-grid"></div>
-
-            <div class="charts-grid">
-              <div class="chart-panel">
-                <canvas id="agileBarChart"></canvas>
-              </div>
-              <div class="chart-panel">
-                <canvas id="performanceBarChart"></canvas>
-              </div>
-              <div class="chart-panel full">
-                <canvas id="likertDoughnutChart"></canvas>
-              </div>
-            </div>
-
-            <div id="keyFindings" class="key-findings"></div>
-
-            <div class="table-wrap">
-              <h4>Question Response Tally</h4>
-              <div id="questionDistributionTable"></div>
-            </div>
-
-            <div class="survey-actions" style="margin-top: 1.5rem;">
-              <button id="downloadJsonBtn" class="secondary-btn" type="button">Download JSON</button>
-              <button id="downloadCsvBtn" class="primary-btn" type="button">Download CSV</button>
-            </div>
-          </div>
-        </section>
-
-        <section id="thankYouScreen" class="screen" aria-live="polite">
-          <div class="card thankyou-card">
-            <div class="success-badge" aria-hidden="true">✓</div>
-            <h3>Thank you for participating in this research study.</h3>
-            <div class="respondent-box">
-              <span>Respondent ID:</span>
-              <strong id="thankYouRespondentId">--</strong>
-            </div>
-            <div class="timestamp" id="thankYouTimestamp">Completion Time: --</div>
-            <div class="button-row" style="justify-content: center;">
-              <button id="downloadThankYouBtn" class="primary-btn" type="button">Download Results</button>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <footer class="footer">
-        <div class="footer-inner">
-          <button id="adminTriggerBtn" class="admin-trigger" type="button" aria-label="Administrator mode"></button>
-        </div>
-      </footer>
-    </div>
-
-    <div id="adminModal" class="modal" aria-hidden="true">
-      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
-        <h3 id="adminModalTitle">Administrator Dashboard</h3>
-        <div id="adminContent" class="admin-grid"></div>
-      </div>
-    </div>
-
-    <script>
-      const STORAGE_KEYS = {
-        currentResponse: 'agileSurveyCurrentResponse',
-        aggregateResponses: 'agileSurveyAggregateResponses'
-      };
-
-      const LIKERT_SCALE = [
-        { value: 1, label: 'Strongly Disagree' },
-        { value: 2, label: 'Disagree' },
-        { value: 3, label: 'Neutral' },
-        { value: 4, label: 'Agree' },
-        { value: 5, label: 'Strongly Agree' }
-      ];
-
-      const surveyStructure = [
-        {
-          id: 'A',
-          title: 'Section A: Demographic Information',
-          type: 'demographics',
-          questions: [
-            {
-              id: 'gender',
-              label: 'Gender',
-              type: 'select',
-              placeholder: 'Select gender',
-              options: ['Male', 'Female']
-            },
-            {
-              id: 'ageGroup',
-              label: 'Age',
-              type: 'select',
-              placeholder: 'Select age group',
-              options: ['20-29', '30-39', '40-49', '50+']
-            },
-            {
-              id: 'jobDescription',
-              label: 'Job Description',
-              type: 'select',
-              placeholder: 'Select job role',
-              options: [
-                'ICT Officer',
-                'Project Manager',
-                'Systems Analyst',
-                'Software Developer',
-                'Network Engineer',
-                'Business Analyst',
-                'Operations Manager',
-                'Other'
-              ]
-            },
-            {
-              id: 'yearsOfExperience',
-              label: 'Years of Experience',
-              type: 'select',
-              placeholder: 'Select years of experience',
-              options: ['0-2 years', '3-5 years', '6-10 years', '11-15 years', '16+ years']
-            },
-            {
-              id: 'previousAgileExperience',
-              label: 'Previous Agile Experience',
-              type: 'radio',
-              options: ['Yes', 'No']
-            }
-          ]
-        },
-        {
-          id: 'B1',
-          title: 'B1 Stakeholder Collaboration',
-          type: 'agile',
-          category: 'Stakeholder Collaboration',
-          questions: [
-            { id: 'B1_1', text: 'Stakeholders are involved early in project planning and decision-making.' },
-            { id: 'B1_2', text: 'There is frequent communication between project teams and stakeholders.' },
-            { id: 'B1_3', text: 'Stakeholder feedback is consistently considered in project decisions.' },
-            { id: 'B1_4', text: 'Project priorities are aligned with stakeholder expectations.' },
-            { id: 'B1_5', text: 'Collaboration with stakeholders improves project transparency and accountability.' },
-            { id: 'B1_6', text: 'Stakeholder engagement contributes meaningfully to project success.' }
-          ]
-        },
-        {
-          id: 'B2',
-          title: 'B2 Cross Functional Teams',
-          type: 'agile',
-          category: 'Cross Functional Teams',
-          questions: [
-            { id: 'B2_1', text: 'Project teams include members with diverse technical and business skills.' },
-            { id: 'B2_2', text: 'Cross-functional teams support faster problem solving and decision-making.' },
-            { id: 'B2_3', text: 'Team members collaborate effectively across departments.' },
-            { id: 'B2_4', text: 'Cross-functional team structures improve the quality of ICT project delivery.' }
-          ]
-        },
-        {
-          id: 'B3',
-          title: 'B3 Adaptive Planning',
-          type: 'agile',
-          category: 'Adaptive Planning',
-          questions: [
-            { id: 'B3_1', text: 'Project plans are reviewed and adjusted regularly as project conditions change.' },
-            { id: 'B3_2', text: 'The project team responds effectively to changing requirements.' },
-            { id: 'B3_3', text: 'Adaptive planning helps the project remain aligned with organizational goals.' }
-          ]
-        },
-        {
-          id: 'B4',
-          title: 'B4 Continuous Improvement',
-          type: 'agile',
-          category: 'Continuous Improvement',
-          questions: [
-            { id: 'B4_1', text: 'The project team regularly reviews work processes to identify improvement opportunities.' },
-            { id: 'B4_2', text: 'Lessons learned are captured and applied in subsequent project phases.' },
-            { id: 'B4_3', text: 'The team is encouraged to improve processes continuously.' },
-            { id: 'B4_4', text: 'Continuous improvement practices contribute to better project outcomes.' }
-          ]
-        },
-        {
-          id: 'C1',
-          title: 'C1 Schedule Performance',
-          type: 'performance',
-          category: 'Schedule Performance',
-          questions: [
-            { id: 'C1_1', text: 'Projects are completed within the planned schedule.' },
-            { id: 'C1_2', text: 'Agile practices help the team deliver outputs on time.' },
-            { id: 'C1_3', text: 'Schedule delays are managed efficiently through iterative delivery.' }
-          ]
-        },
-        {
-          id: 'C2',
-          title: 'C2 Cost Performance',
-          type: 'performance',
-          category: 'Cost Performance',
-          questions: [
-            { id: 'C2_1', text: 'Projects are delivered within approved budget limits.' },
-            { id: 'C2_2', text: 'Agile practices support efficient use of project resources.' }
-          ]
-        },
-        {
-          id: 'C3',
-          title: 'C3 Quality Performance',
-          type: 'performance',
-          category: 'Quality Performance',
-          questions: [
-            { id: 'C3_1', text: 'The final ICT system meets user requirements and expectations.' },
-            { id: 'C3_2', text: 'Project quality is monitored throughout the lifecycle.' },
-            { id: 'C3_3', text: 'Defects are identified and resolved early in the process.' },
-            { id: 'C3_4', text: 'Quality assurance practices are effective in the project environment.' },
-            { id: 'C3_5', text: 'Stakeholders are satisfied with the reliability and functionality of the final system.' },
-            { id: 'C3_6', text: 'Quality performance is improved by the use of agile project practices.' }
-          ]
-        }
-      ];
-
-      const appState = {
-        currentScreen: 'welcome',
-        currentSectionIndex: 0,
-        charts: {}
-      };
-
-      const allQuestionIds = [];
-      surveyStructure.forEach((section) => {
-        if (section.type === 'demographics') {
-          section.questions.forEach((question) => allQuestionIds.push(question.id));
-        } else {
-          section.questions.forEach((question) => allQuestionIds.push(question.id));
-        }
-      });
-
-      const currentResponse = {
-        respondentId: '',
-        timestamp: '',
-        demographics: {},
-        agileResponses: {},
-        performanceResponses: {}
-      };
-
-      const ui = {
-        welcomeScreen: document.getElementById('welcomeScreen'),
-        surveyScreen: document.getElementById('surveyScreen'),
-        resultsScreen: document.getElementById('resultsScreen'),
-        thankYouScreen: document.getElementById('thankYouScreen'),
-        sectionHeading: document.getElementById('sectionHeading'),
-        sectionCounter: document.getElementById('sectionCounter'),
-        progressText: document.getElementById('progressText'),
-        progressBarFill: document.getElementById('progressBarFill'),
-        questionContainer: document.getElementById('questionContainer'),
-        prevBtn: document.getElementById('prevBtn'),
-        nextBtn: document.getElementById('nextBtn'),
-        summaryCards: document.getElementById('summaryCards'),
-        keyFindings: document.getElementById('keyFindings'),
-        questionDistributionTable: document.getElementById('questionDistributionTable'),
-        thankYouRespondentId: document.getElementById('thankYouRespondentId'),
-        thankYouTimestamp: document.getElementById('thankYouTimestamp'),
-        adminModal: document.getElementById('adminModal'),
-        adminContent: document.getElementById('adminContent')
-      };
-
-      function generateRespondentId() {
-        const randomPart = Math.random().toString(36).slice(2, 8).toUpperCase();
-        const timePart = Date.now().toString().slice(-6);
-        return `RESP-${randomPart}-${timePart}`;
-      }
-
-      function getStoredResponses() {
-        try {
-          const raw = localStorage.getItem(STORAGE_KEYS.aggregateResponses);
-          return raw ? JSON.parse(raw) : [];
-        } catch (error) {
-          return [];
-        }
-      }
-
-      function saveStoredResponses(data) {
-        localStorage.setItem(STORAGE_KEYS.aggregateResponses, JSON.stringify(data));
-      }
-
-      function getCurrentScreenState() {
-        try {
-          const raw = localStorage.getItem(STORAGE_KEYS.currentResponse);
-          return raw ? JSON.parse(raw) : null;
-        } catch (error) {
-          return null;
-        }
-      }
-
-      function saveCurrentScreenState() {
-        localStorage.setItem(STORAGE_KEYS.currentResponse, JSON.stringify(currentResponse));
-      }
-
-      function clearCurrentResponse() {
-        localStorage.removeItem(STORAGE_KEYS.currentResponse);
-        Object.assign(currentResponse, {
-          respondentId: '',
-          timestamp: '',
-          demographics: {},
-          agileResponses: {},
-          performanceResponses: {}
-        });
-      }
-
-      function setupInitialState() {
-        const recovered = getCurrentScreenState();
-        if (recovered && recovered.respondentId) {
-          Object.assign(currentResponse, recovered);
-        } else {
-          currentResponse.respondentId = generateRespondentId();
-          currentResponse.timestamp = new Date().toISOString();
-        }
-      }
-
-      function showScreen(screenName) {
-        appState.currentScreen = screenName;
-        const screens = ['welcome', 'survey', 'results', 'thankyou'];
-        screens.forEach((name) => {
-          const target = document.getElementById(`${name}Screen`);
-          if (!target) return;
-          target.classList.toggle('active', name === screenName);
-        });
-      }
-
-      function getCurrentSection() {
-        return surveyStructure[appState.currentSectionIndex];
-      }
-
-      function renderProgress() {
-        const sectionTotal = surveyStructure.length;
-        const progressRatio = (appState.currentSectionIndex + 1) / sectionTotal;
-        const percent = Math.round(progressRatio * 100);
-        ui.progressBarFill.style.setProperty('--progress', `${percent}%`);
-        ui.progressBarFill.style.width = `${percent}%`;
-        ui.progressText.textContent = `${percent}%`;
-        ui.sectionCounter.textContent = `${appState.currentSectionIndex + 1} / ${sectionTotal}`;
-      }
-
-      function renderCurrentSection() {
-        const section = getCurrentSection();
-        ui.sectionHeading.textContent = section.title;
-        renderProgress();
-
-        if (section.type === 'demographics') {
-          ui.questionContainer.innerHTML = section.questions
-            .map((question) => {
-              const value = currentResponse.demographics[question.id] || '';
-
-              if (question.type === 'radio') {
-                return `
-                  <div class="question-card">
-                    <label class="question-label" for="${question.id}">${question.label}</label>
-                    <div class="button-row" role="radiogroup" aria-label="${question.label}">
-                      ${question.options
-                        .map(
-                          (option) => `
-                            <label style="display:inline-flex; align-items:center; gap:0.5rem; cursor:pointer; padding:0.7rem 0.8rem; border-radius:12px; background:${value === option ? '#eaf4fb' : '#fff'}; border:1px solid ${value === option ? '#0d4d73' : 'rgba(29,42,54,0.12)'};">
-                              <input type="radio" name="${question.id}" value="${option}" ${value === option ? 'checked' : ''} />
-                              <span>${option}</span>
-                            </label>
-                          `
-                        )
-                        .join('')}
-                    </div>
-                  </div>
-                `;
-              }
-
-              return `
-                <div class="question-card demographic-question">
-                  <label class="question-label" for="${question.id}">${question.label}</label>
-                  <select id="${question.id}" class="field" data-input-type="${question.type}" aria-label="${question.label}">
-                    <option value="">${question.placeholder}</option>
-                    ${question.options
-                      .map(
-                        (option) => `<option value="${option}" ${value === option ? 'selected' : ''}>${option}</option>`
-                      )
-                      .join('')}
-                  </select>
-                </div>
-              `;
-            })
-            .join('');
-        } else {
-          ui.questionContainer.innerHTML = section.questions
-            .map((question) => {
-              const answerValue = section.type === 'agile' ? currentResponse.agileResponses[question.id] : currentResponse.performanceResponses[question.id];
-
-              return `
-                <div class="question-card" data-question-id="${question.id}">
-                  <label class="question-label">${question.text}</label>
-                  <div class="likert-options" role="radiogroup" aria-label="${question.text}">
-                    ${LIKERT_SCALE.map(
-                      (option) => `
-                        <button
-                          type="button"
-                          class="likert-card ${answerValue === option.value ? 'selected' : ''}"
-                          data-value="${option.value}"
-                          data-question-id="${question.id}"
-                          aria-label="${question.text}: ${option.label}"
-                          aria-pressed="${answerValue === option.value ? 'true' : 'false'}"
-                        >
-                          <span class="likert-score">${option.value}</span>
-                          <span class="likert-label">${option.label}</span>
-                        </button>
-                      `
-                    ).join('')}
-                  </div>
-                </div>
-              `;
-            })
-            .join('');
-        }
-
-        ui.prevBtn.style.visibility = appState.currentSectionIndex === 0 ? 'hidden' : 'visible';
-        const isLastSection = appState.currentSectionIndex === surveyStructure.length - 1;
-        ui.nextBtn.textContent = isLastSection ? 'Submit Survey' : 'Next';
-      }
-
-      function updateSectionValue(targetId, value) {
-        const section = getCurrentSection();
-        if (section.type === 'demographics') {
-          currentResponse.demographics[targetId] = value;
-        } else if (section.type === 'agile') {
-          currentResponse.agileResponses[targetId] = Number(value);
-        } else if (section.type === 'performance') {
-          currentResponse.performanceResponses[targetId] = Number(value);
-        }
-        saveCurrentScreenState();
-      }
-
-      function validateSection() {
-        const section = getCurrentSection();
-
-        if (section.type === 'demographics') {
-          for (const question of section.questions) {
-            const value = currentResponse.demographics[question.id];
-            if (!value || (typeof value === 'string' && !value.trim())) {
-              alert(`Please complete the question: ${question.label}`);
-              return false;
-            }
-          }
-          return true;
-        }
-
-        for (const question of section.questions) {
-          const answerValue = section.type === 'agile'
-            ? currentResponse.agileResponses[question.id]
-            : currentResponse.performanceResponses[question.id];
-
-          if (answerValue === undefined || answerValue === null || Number.isNaN(answerValue)) {
-            alert(`Please answer: ${question.text}`);
-            return false;
-          }
-        }
-
-        return true;
-      }
-
-      function moveToNextSection() {
-        if (!validateSection()) return;
-
-        if (appState.currentSectionIndex < surveyStructure.length - 1) {
-          appState.currentSectionIndex += 1;
-          renderCurrentSection();
-          return;
-        }
-
-        submitSurvey();
-      }
-
-      function moveToPreviousSection() {
-        if (appState.currentSectionIndex > 0) {
-          appState.currentSectionIndex -= 1;
-          renderCurrentSection();
-        }
-      }
-
-      function attachEventHandlers() {
-        document.getElementById('startSurveyBtn').addEventListener('click', () => {
-          currentResponse.respondentId = currentResponse.respondentId || generateRespondentId();
-          currentResponse.timestamp = currentResponse.timestamp || new Date().toISOString();
-          saveCurrentScreenState();
-          appState.currentSectionIndex = 0;
-          showScreen('survey');
-          renderCurrentSection();
-        });
-
-        ui.prevBtn.addEventListener('click', moveToPreviousSection);
-        ui.nextBtn.addEventListener('click', moveToNextSection);
-
-        ui.questionContainer.addEventListener('change', (event) => {
-          const target = event.target;
-          if (!target || !target.id) return;
-          if (target.matches('select')) {
-            updateSectionValue(target.id, target.value);
-          }
-
-          if (target.matches('input[type="radio"]')) {
-            const { name, value } = target;
-            if (name) {
-              updateSectionValue(name, value);
-            }
-          }
-        });
-
-        ui.questionContainer.addEventListener('click', (event) => {
-          const btn = event.target.closest('.likert-card');
-          if (!btn) return;
-          const { questionId, value } = btn.dataset;
-          const section = getCurrentSection();
-          const numericValue = Number(value);
-
-          if (section.type === 'agile') {
-            currentResponse.agileResponses[questionId] = numericValue;
-          } else if (section.type === 'performance') {
-            currentResponse.performanceResponses[questionId] = numericValue;
-          }
-
-          btn.closest('.question-card').querySelectorAll('.likert-card').forEach((card) => {
-            const isSelected = card.dataset.value === String(numericValue);
-            card.classList.toggle('selected', isSelected);
-            card.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
-          });
-
-          saveCurrentScreenState();
-        });
-
-        document.getElementById('downloadJsonBtn').addEventListener('click', () => {
-          exportSurveyData('json');
-        });
-
-        document.getElementById('downloadCsvBtn').addEventListener('click', () => {
-          exportSurveyData('csv');
-        });
-
-        document.getElementById('downloadThankYouBtn').addEventListener('click', () => {
-          exportSurveyData('json', true);
-        });
-
-        document.getElementById('adminTriggerBtn').addEventListener('click', () => {
-          openAdminDashboard();
-        });
-
-        ui.adminModal.addEventListener('click', (event) => {
-          if (event.target === ui.adminModal) {
-            ui.adminModal.classList.remove('active');
-            ui.adminModal.setAttribute('aria-hidden', 'true');
-          }
-        });
-      }
-
-      function getQuestionNameById(questionId) {
-        for (const section of surveyStructure) {
-          const match = section.questions.find((q) => q.id === questionId);
-          if (match) {
-            return match.text || match.label;
-          }
-        }
-        return questionId;
-      }
-
-      function calculateCategoryAverage(questionIds, responseMap) {
-        if (!questionIds.length) return 0;
-        const values = questionIds
-          .map((id) => Number(responseMap[id]))
-          .filter((value) => !Number.isNaN(value));
-        if (!values.length) return 0;
-        return values.reduce((sum, value) => sum + value, 0) / values.length;
-      }
-
-      function buildScoreSummary(responseEntry = currentResponse) {
-        const agileGroups = {
-          stakeholderCollaboration: ['B1_1', 'B1_2', 'B1_3', 'B1_4', 'B1_5', 'B1_6'],
-          crossFunctionalTeams: ['B2_1', 'B2_2', 'B2_3', 'B2_4'],
-          adaptivePlanning: ['B3_1', 'B3_2', 'B3_3'],
-          continuousImprovement: ['B4_1', 'B4_2', 'B4_3', 'B4_4']
-        };
-
-        const performanceGroups = {
-          schedulePerformance: ['C1_1', 'C1_2', 'C1_3'],
-          costPerformance: ['C2_1', 'C2_2'],
-          qualityPerformance: ['C3_1', 'C3_2', 'C3_3', 'C3_4', 'C3_5', 'C3_6']
-        };
-
-        const agileScores = {};
-        Object.entries(agileGroups).forEach(([key, ids]) => {
-          agileScores[key] = calculateCategoryAverage(ids, responseEntry.agileResponses);
-        });
-
-        const performanceScores = {};
-        Object.entries(performanceGroups).forEach(([key, ids]) => {
-          performanceScores[key] = calculateCategoryAverage(ids, responseEntry.performanceResponses);
-        });
-
-        const overallAgile = Object.values(agileScores).reduce((sum, val) => sum + val, 0) / Object.keys(agileScores).length;
-        const overallPerformance = Object.values(performanceScores).reduce((sum, val) => sum + val, 0) / Object.keys(performanceScores).length;
-
-        return {
-          agileScores,
-          performanceScores,
-          overallAgile,
-          overallPerformance,
-          totalQuestionsAnswered: Object.keys(responseEntry.agileResponses).length + Object.keys(responseEntry.performanceResponses).length
-        };
-      }
-
-      function buildLikertCounts(allResponses) {
-        const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-        allResponses.forEach((entry) => {
-          const allAnswers = [...Object.values(entry.agileResponses), ...Object.values(entry.performanceResponses)];
-          allAnswers.forEach((value) => {
-            const key = Number(value);
-            if (!Number.isNaN(key) && counts[key] !== undefined) {
-              counts[key] += 1;
-            }
-          });
-        });
-        return counts;
-      }
-
-      function computeGenderCounts(allResponses) {
-        const counts = { Male: 0, Female: 0 };
-        allResponses.forEach((entry) => {
-          if (entry.demographics && entry.demographics.gender) {
-            counts[entry.demographics.gender] = (counts[entry.demographics.gender] || 0) + 1;
-          }
-        });
-        return counts;
-      }
-
-      function computeAgeGroupCounts(allResponses) {
-        const groups = ['20-29', '30-39', '40-49', '50+'];
-        const counts = Object.fromEntries(groups.map((group) => [group, 0]));
-        allResponses.forEach((entry) => {
-          if (entry.demographics && entry.demographics.ageGroup) {
-            counts[entry.demographics.ageGroup] = (counts[entry.demographics.ageGroup] || 0) + 1;
-          }
-        });
-        return counts;
-      }
-
-      function computeJobCategoryCounts(allResponses) {
-        const counts = {};
-        allResponses.forEach((entry) => {
-          const job = entry.demographics && entry.demographics.jobDescription ? entry.demographics.jobDescription : 'Unknown';
-          counts[job] = (counts[job] || 0) + 1;
-        });
-        return counts;
-      }
-
-      function computeAgileExperienceCounts(allResponses) {
-        const counts = { Yes: 0, No: 0 };
-        allResponses.forEach((entry) => {
-          if (entry.demographics && entry.demographics.previousAgileExperience) {
-            const value = entry.demographics.previousAgileExperience;
-            counts[value] = (counts[value] || 0) + 1;
-          }
-        });
-        return counts;
-      }
-
-      function getOverallAverageScore(allResponses) {
-        if (!allResponses.length) return 0;
-        let total = 0;
-        let count = 0;
-
-        allResponses.forEach((entry) => {
-          const score = buildScoreSummary(entry);
-          total += score.overallAgile + score.overallPerformance;
-          count += 2;
-        });
-
-        return count ? total / count : 0;
-      }
-
-      function buildSummaryCards(allResponses) {
-        const currentSummary = buildScoreSummary(currentResponse);
-        const totalResponses = allResponses.length + 1;
-        const avgAgile = allResponses.length
-          ? allResponses.reduce((sum, entry) => sum + buildScoreSummary(entry).overallAgile, 0) / allResponses.length
-          : currentSummary.overallAgile;
-        const avgPerformance = allResponses.length
-          ? allResponses.reduce((sum, entry) => sum + buildScoreSummary(entry).overallPerformance, 0) / allResponses.length
-          : currentSummary.overallPerformance;
-
-        const cards = [
-          { label: 'Total Responses', value: totalResponses, sub: 'Completed submissions' },
-          { label: 'Average Agile Adoption Score', value: avgAgile.toFixed(2), sub: 'Out of 5' },
-          { label: 'Average ICT Performance Score', value: avgPerformance.toFixed(2), sub: 'Out of 5' },
-          { label: 'Completion Rate', value: '100%', sub: 'Survey completion status' }
-        ];
-
-        ui.summaryCards.innerHTML = cards
-          .map(
-            (card) => `
-              <div class="metric-card">
-                <div class="metric-label">${card.label}</div>
-                <div class="metric-value">${card.value}</div>
-                <div class="metric-sub">${card.sub}</div>
-              </div>
-            `
-          )
-          .join('');
-      }
-
-      function getInterpretation(score, label) {
-        if (score >= 4.0) return `${label} = ${score.toFixed(1)} (High)`;
-        if (score >= 3.0) return `${label} = ${score.toFixed(1)} (Moderate)`;
-        return `${label} = ${score.toFixed(1)} (Low)`;
-      }
-
-      function renderKeyFindings(allResponses) {
-        const scores = buildScoreSummary(currentResponse);
-        const agileScore = scores.overallAgile || 0;
-        const performanceScore = scores.overallPerformance || 0;
-
-        const findings = [
-          getInterpretation(agileScore, 'Agile Adoption Score'),
-          getInterpretation(performanceScore, 'Project Performance Score')
-        ];
-
-        const interpretationText = [
-          agileScore >= 4 ? 'Agile practices are strongly embedded in project delivery and are associated with strong team collaboration and adaptive planning.' : agileScore >= 3 ? 'Agile practices are acceptable but may benefit from stronger continuous improvement and stakeholder alignment.' : 'Agile adoption remains limited and requires targeted reinforcement across stakeholder collaboration and planning processes.',
-          performanceScore >= 4 ? 'Project performance is notably strong, suggesting effective controls around schedule, quality, and cost management.' : performanceScore >= 3 ? 'Project performance is generally positive, with opportunity to strengthen issues around execution predictability and quality consistency.' : 'Project performance requires strategic attention, especially in schedule reliability and quality management.'
-        ];
-
-        ui.keyFindings.innerHTML = `
-          <h4>Key Findings</h4>
-          <ul>
-            <li>${findings[0]}</li>
-            <li>${findings[1]}</li>
-            <li>${interpretationText[0]}</li>
-            <li>${interpretationText[1]}</li>
-          </ul>
-        `;
-      }
-
-      function renderCharts(allResponses) {
-        const finalResponses = [...allResponses, currentResponse];
-        const validResponses = finalResponses.filter((entry) => {
-          const hasAgile = Object.keys(entry.agileResponses || {}).length > 0;
-          const hasPerformance = Object.keys(entry.performanceResponses || {}).length > 0;
-          return hasAgile && hasPerformance;
-        });
-
-        const categoryAgg = {
-          stakeholderCollaboration: { label: 'Stakeholder Collaboration', values: [] },
-          crossFunctionalTeams: { label: 'Cross Functional Teams', values: [] },
-          adaptivePlanning: { label: 'Adaptive Planning', values: [] },
-          continuousImprovement: { label: 'Continuous Improvement', values: [] }
-        };
-
-        const performanceAgg = {
-          schedulePerformance: { label: 'Schedule', values: [] },
-          costPerformance: { label: 'Cost', values: [] },
-          qualityPerformance: { label: 'Quality Performance', values: [] }
-        };
-
-        const agileGroupsMap = {
-          stakeholderCollaboration: ['B1_1', 'B1_2', 'B1_3', 'B1_4', 'B1_5', 'B1_6'],
-          crossFunctionalTeams: ['B2_1', 'B2_2', 'B2_3', 'B2_4'],
-          adaptivePlanning: ['B3_1', 'B3_2', 'B3_3'],
-          continuousImprovement: ['B4_1', 'B4_2', 'B4_3', 'B4_4']
-        };
-
-        const performanceGroupsMap = {
-          schedulePerformance: ['C1_1', 'C1_2', 'C1_3'],
-          costPerformance: ['C2_1', 'C2_2'],
-          qualityPerformance: ['C3_1', 'C3_2', 'C3_3', 'C3_4', 'C3_5', 'C3_6']
-        };
-
-        validResponses.forEach((entry) => {
-          Object.entries(agileGroupsMap).forEach(([key, ids]) => {
-            categoryAgg[key].values.push(calculateCategoryAverage(ids, entry.agileResponses));
-          });
-
-          Object.entries(performanceGroupsMap).forEach(([key, ids]) => {
-            performanceAgg[key].values.push(calculateCategoryAverage(ids, entry.performanceResponses));
-          });
-        });
-
-        const chart1Labels = Object.values(categoryAgg).map((entry) => entry.label);
-        const chart1Data = Object.values(categoryAgg).map((entry) => {
-          const avg = entry.values.reduce((sum, value) => sum + value, 0) / (entry.values.length || 1);
-          return Number(avg.toFixed(2));
-        });
-
-        const chart2Labels = Object.values(performanceAgg).map((entry) => entry.label);
-        const chart2Data = Object.values(performanceAgg).map((entry) => {
-          const avg = entry.values.reduce((sum, value) => sum + value, 0) / (entry.values.length || 1);
-          return Number(avg.toFixed(2));
-        });
-
-        const chart3Counts = buildLikertCounts(validResponses);
-        const chart3Data = [chart3Counts[1], chart3Counts[2], chart3Counts[3], chart3Counts[4], chart3Counts[5]];
-
-        if (appState.charts.agileBar) appState.charts.agileBar.destroy();
-        if (appState.charts.performanceBar) appState.charts.performanceBar.destroy();
-        if (appState.charts.likertDoughnut) appState.charts.likertDoughnut.destroy();
-
-        appState.charts.agileBar = new Chart(document.getElementById('agileBarChart').getContext('2d'), {
-          type: 'bar',
-          data: {
-            labels: chart1Labels,
-            datasets: [{
-              label: 'Average Agile Category Scores',
-              data: chart1Data,
-              backgroundColor: ['#0d4d73', '#2c7a9c', '#5a9dc0', '#9bc9d9'],
-              borderRadius: 8,
-              borderSkipped: false
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true,
-                suggestedMax: 5,
-                title: {
-                  display: true,
-                  text: 'Average Score (out of 5)'
-                }
-              }
-            },
-            plugins: {
-              legend: { display: false }
-            }
-          }
-        });
-
-        appState.charts.performanceBar = new Chart(document.getElementById('performanceBarChart').getContext('2d'), {
-          type: 'bar',
-          data: {
-            labels: chart2Labels,
-            datasets: [{
-              label: 'Average Performance Scores',
-              data: chart2Data,
-              backgroundColor: ['#0f8f72', '#3aac8c', '#7fd0b2'],
-              borderRadius: 8,
-              borderSkipped: false
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true,
-                suggestedMax: 5,
-                title: {
-                  display: true,
-                  text: 'Average Score (out of 5)'
-                }
-              }
-            },
-            plugins: {
-              legend: { display: false }
-            }
-          }
-        });
-
-        appState.charts.likertDoughnut = new Chart(document.getElementById('likertDoughnutChart').getContext('2d'), {
-          type: 'doughnut',
-          data: {
-            labels: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'],
-            datasets: [{
-              label: 'Likert Distribution',
-              data: chart3Data,
-              backgroundColor: ['#d95d5d', '#e7a72a', '#8ac0d8', '#5ebd8f', '#0d4d73'],
-              borderWidth: 1,
-              hoverOffset: 8
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                position: 'bottom'
-              }
-            }
-          }
-        });
-      }
-
-      function renderQuestionTallyTable(allResponses) {
-        const validResponses = [...allResponses, currentResponse].filter((entry) => Object.keys(entry.agileResponses || {}).length || Object.keys(entry.performanceResponses || {}).length);
-        const questions = [];
-
-        surveyStructure.forEach((section) => {
-          if (section.type !== 'demographics') {
-            section.questions.forEach((question) => {
-              questions.push({ id: question.id, text: question.text });
-            });
-          }
-        });
-
-        const rows = questions.map((question) => {
-          const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-          validResponses.forEach((entry) => {
-            const values = { ...entry.agileResponses, ...entry.performanceResponses };
-            const value = values[question.id];
-            if (value !== undefined && counts[value] !== undefined) {
-              counts[value] += 1;
-            }
-          });
-
-          return `
-            <tr>
-              <td>${question.text}</td>
-              <td>${counts[1]}</td>
-              <td>${counts[2]}</td>
-              <td>${counts[3]}</td>
-              <td>${counts[4]}</td>
-              <td>${counts[5]}</td>
-            </tr>
-          `;
-        }).join('');
-
-        ui.questionDistributionTable.innerHTML = `
-          <table>
-            <thead>
-              <tr>
-                <th>Question</th>
-                <th>1</th>
-                <th>2</th>
-                <th>3</th>
-                <th>4</th>
-                <th>5</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
-        `;
-      }
-
-      function renderResultsScreen() {
-        const stored = getStoredResponses();
-        const allResponses = [...stored, currentResponse].filter((entry) => entry && Object.keys(entry.agileResponses || {}).length && Object.keys(entry.performanceResponses || {}).length);
-
-        buildSummaryCards(allResponses);
-        renderKeyFindings(allResponses);
-        renderCharts(allResponses);
-        renderQuestionTallyTable(allResponses);
-      }
-
-      function submitSurvey() {
-        const stored = getStoredResponses();
-        const entry = {
-          respondentId: currentResponse.respondentId,
-          timestamp: new Date().toISOString(),
-          demographics: { ...currentResponse.demographics },
-          agileResponses: { ...currentResponse.agileResponses },
-          performanceResponses: { ...currentResponse.performanceResponses }
-        };
-
-        stored.push(entry);
-        saveStoredResponses(stored);
-
-        ui.thankYouRespondentId.textContent = entry.respondentId;
-        ui.thankYouTimestamp.textContent = `Completion Time: ${new Date(entry.timestamp).toLocaleString()}`;
-
-        clearCurrentResponse();
-        currentResponse.respondentId = entry.respondentId;
-        currentResponse.timestamp = entry.timestamp;
-        currentResponse.demographics = { ...entry.demographics };
-        currentResponse.agileResponses = { ...entry.agileResponses };
-        currentResponse.performanceResponses = { ...entry.performanceResponses };
-        saveCurrentScreenState();
-
-        showScreen('results');
-        renderResultsScreen();
-      }
-
-      function exportSurveyData(type, currentOnly = false) {
-        const stored = getStoredResponses();
-        const dataSet = currentOnly ? [currentResponse] : [...stored, currentResponse];
-        const validResponses = dataSet.filter((entry) => entry && entry.respondentId);
-
-        if (!validResponses.length) {
-          alert('No survey data available to export.');
-          return;
-        }
-
-        const exportPayload = validResponses.map((entry) => {
-          const scores = buildScoreSummary(entry);
-          return {
-            respondentId: entry.respondentId,
-            timestamp: entry.timestamp,
-            demographics: entry.demographics,
-            agileResponses: entry.agileResponses,
-            performanceResponses: entry.performanceResponses,
-            scores: {
-              stakeholderCollaboration: scores.agileScores.stakeholderCollaboration,
-              crossFunctionalTeams: scores.agileScores.crossFunctionalTeams,
-              adaptivePlanning: scores.agileScores.adaptivePlanning,
-              continuousImprovement: scores.agileScores.continuousImprovement,
-              overallAgileAdoptionScore: scores.overallAgile,
-              schedulePerformance: scores.performanceScores.schedulePerformance,
-              costPerformance: scores.performanceScores.costPerformance,
-              qualityPerformance: scores.performanceScores.qualityPerformance,
-              overallICTProjectPerformanceScore: scores.overallPerformance
-            }
-          };
-        });
-
-        if (type === 'json') {
-          const json = JSON.stringify(exportPayload, null, 2);
-          const blob = new Blob([json], { type: 'application/json' });
-          const url = URL.createObjectURL(blob);
-          const anchor = document.createElement('a');
-          anchor.href = url;
-          anchor.download = currentOnly ? 'survey_response.json' : 'all_survey_responses.json';
-          anchor.click();
-          URL.revokeObjectURL(url);
-          return;
-        }
-
-        if (type === 'csv') {
-          const rows = [];
-          const headers = [
-            'respondentId',
-            'timestamp',
-            'gender',
-            'ageGroup',
-            'jobDescription',
-            'yearsOfExperience',
-            'previousAgileExperience',
-            'B1_1',
-            'B1_2',
-            'B1_3',
-            'B1_4',
-            'B1_5',
-            'B1_6',
-            'B2_1',
-            'B2_2',
-            'B2_3',
-            'B2_4',
-            'B3_1',
-            'B3_2',
-            'B3_3',
-            'B4_1',
-            'B4_2',
-            'B4_3',
-            'B4_4',
-            'C1_1',
-            'C1_2',
-            'C1_3',
-            'C2_1',
-            'C2_2',
-            'C3_1',
-            'C3_2',
-            'C3_3',
-            'C3_4',
-            'C3_5',
-            'C3_6',
-            'stakeholderCollaboration',
-            'crossFunctionalTeams',
-            'adaptivePlanning',
-            'continuousImprovement',
-            'overallAgileAdoptionScore',
-            'schedulePerformance',
-            'costPerformance',
-            'qualityPerformance',
-            'overallICTProjectPerformanceScore'
-          ];
-
-          rows.push(headers.join(','));
-
-          validResponses.forEach((entry) => {
-            const scores = buildScoreSummary(entry);
-            const row = [
-              entry.respondentId,
-              entry.timestamp,
-              entry.demographics.gender || '',
-              entry.demographics.ageGroup || '',
-              entry.demographics.jobDescription || '',
-              entry.demographics.yearsOfExperience || '',
-              entry.demographics.previousAgileExperience || '',
-              entry.agileResponses.B1_1 || '',
-              entry.agileResponses.B1_2 || '',
-              entry.agileResponses.B1_3 || '',
-              entry.agileResponses.B1_4 || '',
-              entry.agileResponses.B1_5 || '',
-              entry.agileResponses.B1_6 || '',
-              entry.agileResponses.B2_1 || '',
-              entry.agileResponses.B2_2 || '',
-              entry.agileResponses.B2_3 || '',
-              entry.agileResponses.B2_4 || '',
-              entry.agileResponses.B3_1 || '',
-              entry.agileResponses.B3_2 || '',
-              entry.agileResponses.B3_3 || '',
-              entry.agileResponses.B4_1 || '',
-              entry.agileResponses.B4_2 || '',
-              entry.agileResponses.B4_3 || '',
-              entry.agileResponses.B4_4 || '',
-              entry.performanceResponses.C1_1 || '',
-              entry.performanceResponses.C1_2 || '',
-              entry.performanceResponses.C1_3 || '',
-              entry.performanceResponses.C2_1 || '',
-              entry.performanceResponses.C2_2 || '',
-              entry.performanceResponses.C3_1 || '',
-              entry.performanceResponses.C3_2 || '',
-              entry.performanceResponses.C3_3 || '',
-              entry.performanceResponses.C3_4 || '',
-              entry.performanceResponses.C3_5 || '',
-              entry.performanceResponses.C3_6 || '',
-              scores.agileScores.stakeholderCollaboration || '',
-              scores.agileScores.crossFunctionalTeams || '',
-              scores.agileScores.adaptivePlanning || '',
-              scores.agileScores.continuousImprovement || '',
-              scores.overallAgile || '',
-              scores.performanceScores.schedulePerformance || '',
-              scores.performanceScores.costPerformance || '',
-              scores.performanceScores.qualityPerformance || '',
-              scores.overallPerformance || ''
-            ];
-
-            rows.push(row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','));
-          });
-
-          const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = currentOnly ? 'survey_response.csv' : 'all_survey_responses.csv';
-          link.click();
-          URL.revokeObjectURL(url);
-        }
-      }
-
-      function openAdminDashboard() {
-        const password = window.prompt('Enter administrator password:');
-        if (password !== 'admin123') {
-          if (password !== null) {
-            alert('Incorrect password. Access denied.');
-          }
-          return;
-        }
-
-        const allResponses = getStoredResponses();
-        const totalRespondents = allResponses.length;
-        const genderCounts = computeGenderCounts(allResponses);
-        const ageCounts = computeAgeGroupCounts(allResponses);
-        const jobCounts = computeJobCategoryCounts(allResponses);
-        const agileExperience = computeAgileExperienceCounts(allResponses);
-        const avgScores = allResponses.length
-          ? allResponses.reduce((sum, entry) => sum + buildScoreSummary(entry).overallAgile, 0) / allResponses.length
-          : 0;
-        const avgPerf = allResponses.length
-          ? allResponses.reduce((sum, entry) => sum + buildScoreSummary(entry).overallPerformance, 0) / allResponses.length
-          : 0;
-
-        ui.adminContent.innerHTML = `
-          <div class="admin-summary-min">
-            <div class="mini-stat">
-              <span class="muted">Total respondents</span>
-              <strong>${totalRespondents}</strong>
-            </div>
-            <div class="mini-stat">
-              <span class="muted">Avg Agile Score</span>
-              <strong>${avgScores.toFixed(2)}</strong>
-            </div>
-            <div class="mini-stat">
-              <span class="muted">Avg Performance Score</span>
-              <strong>${avgPerf.toFixed(2)}</strong>
-            </div>
-            <div class="mini-stat">
-              <span class="muted">Gender split</span>
-              <strong>${(genderCounts.Male || 0) + (genderCounts.Female || 0)}</strong>
-            </div>
-          </div>
-
-          <div class="warning-banner">
-            Use this dashboard to review aggregated survey data. Clearing data is permanent.
-          </div>
-
-          <div>
-            <h4>Gender distribution</h4>
-            <ul>
-              ${Object.entries(genderCounts).map(([key, value]) => `<li>${key}: ${value}</li>`).join('')}
-            </ul>
-          </div>
-
-          <div>
-            <h4>Age distribution</h4>
-            <ul>
-              ${Object.entries(ageCounts).map(([key, value]) => `<li>${key}: ${value}</li>`).join('')}
-            </ul>
-          </div>
-
-          <div>
-            <h4>Job category distribution</h4>
-            <ul>
-              ${Object.entries(jobCounts).map(([key, value]) => `<li>${key}: ${value}</li>`).join('')}
-            </ul>
-          </div>
-
-          <div>
-            <h4>Agile experience</h4>
-            <ul>
-              ${Object.entries(agileExperience).map(([key, value]) => `<li>${key}: ${value}</li>`).join('')}
-            </ul>
-          </div>
-
-          <div class="button-row">
-            <button class="primary-btn" type="button" id="adminDownloadAllBtn">Download all responses</button>
-            <button class="secondary-btn" type="button" id="adminClearBtn">Clear stored data</button>
-          </div>
-        `;
-
-        const adminDownloadBtn = document.getElementById('adminDownloadAllBtn');
-        const adminClearBtn = document.getElementById('adminClearBtn');
-
-        adminDownloadBtn.addEventListener('click', () => {
-          exportSurveyData('json');
-        });
-
-        adminClearBtn.addEventListener('click', () => {
-          const confirmDelete = window.confirm('This action will permanently clear all stored survey submissions. Continue?');
-          if (!confirmDelete) return;
-          localStorage.removeItem(STORAGE_KEYS.aggregateResponses);
-          alert('All stored survey data has been cleared.');
-          ui.adminModal.classList.remove('active');
-          ui.adminModal.setAttribute('aria-hidden', 'true');
-          openAdminDashboard();
-        });
-
-        ui.adminModal.classList.add('active');
-        ui.adminModal.setAttribute('aria-hidden', 'false');
-      }
-
-      function initialize() {
-        setupInitialState();
-        attachEventHandlers();
-        showScreen('welcome');
-      }
-
-      initialize();
-    </script>
-  </body>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Agile Methodology and Project Performance on ICT Projects in the Ministry of Transport, Kenya questionnaire">
+<title>Agile Methodology and ICT Project Performance Survey</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--navy:#0b466b;--blue:#1976a8;--light:#edf5fa;--lighter:#f8fbfd;--ink:#1d2a36;--muted:#637383;--white:#fff;--green:#188653;--red:#c84d57;--orange:#e5a629;--yellow:#ffd966;--gray:#95a3b3;--shadow:0 12px 32px rgba(17,59,83,0.15);--radius:18px;--transition:0.3s ease}
+*{box-sizing:border-box;-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(135deg,#edf5fa 0%,#f5fafc 100%);color:var(--ink);font:16px/1.6 'Segoe UI',Arial,sans-serif;min-height:100vh}
+button,input,select{font:inherit;-webkit-font-smoothing:antialiased}
+.top{background:linear-gradient(135deg,var(--navy) 0%,#0d5880 100%);color:#fff;padding:24px 5%;box-shadow:var(--shadow)}.top h1{max-width:1180px;margin:0 auto;font-size:clamp(1.1rem,2.5vw,1.6rem);font-weight:700}
+main{width:min(94%,1180px);margin:40px auto 60px}
+.screen{display:none;animation:fadeUp 0.4s ease}.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.card,.survey{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(11,70,107,0.08)}
+.card{padding:clamp(24px,4vw,48px)}
+h2{font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.2;color:var(--navy);margin:12px 0 24px;font-weight:700}
+h3{font-size:1.3rem;color:var(--navy);margin:20px 0 12px;font-weight:700}
+h4{font-size:1.05rem;color:var(--ink);margin:16px 0 10px;font-weight:700}
+.eyebrow{color:var(--blue);font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase}
+.intro{max-width:900px;color:var(--muted);line-height:1.75}
+.notice{background:var(--light);border-left:5px solid var(--blue);padding:18px;border-radius:12px;margin:24px 0;line-height:1.8;color:var(--muted)}
+.btn{border:0;border-radius:12px;padding:13px 20px;font-weight:700;cursor:pointer;transition:var(--transition);display:inline-block;text-align:center}
+.btn:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(25,118,168,0.25)}
+.btn:active{transform:translateY(-1px)}
+.primary{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff}
+.secondary{background:#e7f1f7;color:var(--navy)}
+.actions{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;margin-top:28px}
+.survey-head{background:linear-gradient(135deg,var(--navy),#0d5880);color:#fff;padding:24px;border-radius:var(--radius) var(--radius) 0 0}
+.headrow{display:flex;justify-content:space-between;gap:16px;align-items:center}
+.pill{background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);border-radius:999px;padding:7px 14px;font-size:0.82rem;font-weight:600}
+.progress{height:8px;background:rgba(255,255,255,0.25);border-radius:999px;margin-top:16px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#b9f0ce,#7ae8b8);border-radius:inherit;transition:width 0.4s ease}
+.body{padding:clamp(20px,3vw,36px)}
+.q{background:var(--lighter);border:1px solid rgba(11,70,107,0.08);border-radius:15px;padding:18px;margin-bottom:14px}
+.q label,.q legend{font-weight:700;display:block;margin-bottom:12px;color:var(--ink)}
+.q legend{font-size:1rem}
+.field{width:100%;border:1.5px solid #b8c9d9;border-radius:10px;background:#fff;padding:12px;color:var(--ink);transition:var(--transition)}
+.field:hover{border-color:var(--blue)}
+.field:focus,.option:focus,.btn:focus{outline:3px solid rgba(25,118,168,0.2);outline-offset:2px;border-color:var(--blue)}
+.choices{display:flex;gap:12px;flex-wrap:wrap}
+.choices label{background:#fff;border:1.5px solid #b8c9d9;border-radius:10px;padding:11px 15px;cursor:pointer;font-weight:600;transition:var(--transition);color:var(--ink)}
+.choices label:hover{border-color:var(--blue);background:rgba(25,118,168,0.05)}
+.choices label:has(input:checked){background:#e1f0f8;border-color:var(--navy);color:var(--navy)}
+.choices input{accent-color:var(--navy);cursor:pointer;margin-right:6px}
+.likert{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.option{min-height:90px;border:1.5px solid #b8c9d9;border-radius:13px;background:#fff;cursor:pointer;padding:10px 6px;display:grid;place-items:center;text-align:center;transition:var(--transition);color:var(--muted)}
+.option:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(11,70,107,0.12);border-color:var(--blue)}
+.option.selected{background:linear-gradient(135deg,#e1f0f8,#d4e8f5);border:2px solid var(--navy);color:var(--navy);font-weight:700;box-shadow:0 4px 16px rgba(11,70,107,0.15)}
+.option strong{font-size:1.6rem;display:block;line-height:1}
+.option small{color:var(--muted);line-height:1.3;font-size:0.82rem;margin-top:4px}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin:28px 0}
+.metric{padding:22px;border-radius:16px;background:linear-gradient(135deg,var(--lighter),#f0f7fb);border:1px solid rgba(11,70,107,0.08);transition:var(--transition)}
+.metric:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(11,70,107,0.1)}
+.metric small{color:var(--muted);display:block;text-transform:uppercase;font-size:0.75rem;font-weight:700;letter-spacing:0.08em;margin-bottom:8px}
+.metric strong{display:block;color:var(--navy);font-size:2rem;margin:8px 0;font-weight:800}
+.metric span{color:var(--gray);font-size:0.9rem;line-height:1.5}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:22px;margin:32px 0}
+.chartbox{background:var(--white);border:1px solid rgba(11,70,107,0.08);border-radius:16px;padding:20px;min-height:360px;display:flex;flex-direction:column;box-shadow:0 4px 12px rgba(11,70,107,0.06)}
+.chartbox h4{margin:0 0 16px 0;color:var(--navy)}
+.chartbox canvas{flex:1!important;position:relative;height:auto!important}
+.chartbox.full{grid-column:1/-1}
+.findings{background:linear-gradient(135deg,#f0f8f3 0%,#e8f5f0 100%);border-left:5px solid var(--green);border-radius:14px;padding:24px;margin:32px 0;border-top:1px solid rgba(24,134,83,0.1)}
+.findings h4{color:var(--green);margin-top:0}
+.findings ul{margin:12px 0;padding-left:20px}
+.findings li{line-height:1.8;color:var(--ink);margin-bottom:10px}
+.findings li strong{color:var(--green);font-weight:700}
+.tablewrap{overflow:auto;margin:32px 0;border:1px solid rgba(11,70,107,0.08);border-radius:14px;background:#fff}
+.tablewrap h4{padding:20px 20px 0 20px;margin:0}
+table{width:100%;border-collapse:collapse;min-width:800px;padding:0}
+th,td{padding:13px 16px;border-bottom:1px solid rgba(11,70,107,0.08);text-align:left}
+th{background:linear-gradient(135deg,var(--light),#f0f7fb);color:var(--navy);font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em}
+tr:hover{background:rgba(25,118,168,0.03)}
+td{color:var(--ink);line-height:1.5}
+.success{text-align:center;padding:40px 24px}
+.check{margin:20px auto;width:80px;height:80px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--green),#159f4f);color:white;font-size:2.4rem;animation:pulse 1.2s ease-in-out infinite alternate;box-shadow:0 8px 24px rgba(24,134,83,0.3)}
+@keyframes pulse{to{transform:scale(1.1)}}
+.respondent-info{display:inline-flex;align-items:center;gap:8px;background:var(--light);color:var(--navy);padding:12px 16px;border-radius:999px;font-weight:700;margin:16px 0;font-size:0.95rem}
+.respondent-info b{color:var(--blue);font-size:1.1rem}
+footer{text-align:right;padding:16px 5%}
+.admin{position:absolute;opacity:0;width:1px;height:1px;pointer-events:auto}
+.modal{display:none;position:fixed;inset:0;background:rgba(11,23,33,0.65);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal.open{display:flex;animation:fadeUp 0.3s ease}
+.modalbox{background:#fff;width:min(95vw,700px);max-height:85vh;overflow-y:auto;border-radius:18px;padding:32px;box-shadow:0 24px 56px rgba(11,23,33,0.28)}
+.modalbox h2{margin-top:0}
+.modalbox h3{font-size:1.15rem;margin:24px 0 14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:24px 0}
+.stat{background:linear-gradient(135deg,var(--lighter),#f0f7fb);border:1px solid rgba(11,70,107,0.08);padding:18px;border-radius:12px;text-align:center}
+.stat small{display:block;color:var(--muted);font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px}
+.stat b{display:block;font-size:1.8rem;color:var(--navy);font-weight:800}
+.dist{background:var(--lighter);border-radius:10px;padding:14px;margin:10px 0;font-size:0.95rem}
+.dist strong{color:var(--navy);font-weight:700}
+@media(max-width:900px){.summary{grid-template-columns:repeat(2,1fr)}.charts{grid-template-columns:1fr}.chartbox.full{grid-column:auto}}
+@media(max-width:640px){
+.summary{grid-template-columns:1fr}
+.likert{grid-template-columns:1fr}
+.headrow{flex-direction:column;align-items:flex-start}
+.btn{width:100%}
+.actions{justify-content:center}
+.choices{flex-direction:column}
+.choices label{width:100%}
+.stats{grid-template-columns:1fr}
+.tablewrap{font-size:0.9rem}
+th,td{padding:10px 12px;font-size:0.85rem}
+}
+</style>
+</head>
+<body>
+<header class="top"><h1>Agile Methodology and Project Performance Survey - Ministry of Transport, Kenya</h1></header>
+<main>
+<section id="welcome" class="screen active">
+<div class="card">
+<p class="eyebrow">Research Questionnaire</p>
+<h2>Agile Methodology and Project Performance on ICT Projects in the Ministry of Transport, Kenya</h2>
+<p class="intro">This Questionnaire is designed to collect information on 'Agile Methodology and Project Performance on ICT Projects in the Ministry of Transport, Kenya'.</p>
+<div class="notice">
+<strong>Confidentiality Assurance:</strong> Any information you provide will be kept strictly confidential and under no circumstances will individual responses be released to anyone else. Information gathered will be solely for the purpose of the study. Your personal and professional opinions and experiences are crucial in helping understand how agile methodology affects the performance of ICT projects in the Ministry of Transport, Kenya. I would greatly appreciate your voluntary participation in completing this questionnaire. Please tick (√) appropriately.
+</div>
+<div class="actions" style="justify-content:center;margin-top:32px">
+<button id="start" class="btn primary">Start Questionnaire</button>
+</div>
+</div>
+</section>
+
+<section id="survey" class="screen">
+<div class="survey">
+<div class="survey-head">
+<div class="headrow">
+<h3 id="title"></h3>
+<span id="counter" class="pill"></span>
+</div>
+<div class="progress" aria-label="Questionnaire progress"><i id="bar"></i></div>
+</div>
+<div class="body">
+<div id="questions"></div>
+<div class="actions">
+<button id="back" class="btn secondary">← Previous</button>
+<button id="next" class="btn primary">Next →</button>
+</div>
+</div>
+</div>
+</section>
+
+<section id="results" class="screen">
+<div class="card">
+<p class="eyebrow">Analysis & Results</p>
+<h2>Your Survey Results Dashboard</h2>
+<div id="summary" class="summary"></div>
+
+<h3 style="margin-top:40px">Agile Adoption Scores</h3>
+<div class="charts">
+<div class="chartbox">
+<h4>Agile Methodology Adoption</h4>
+<canvas id="agileChart"></canvas>
+</div>
+<div class="chartbox">
+<h4>ICT Project Performance</h4>
+<canvas id="performanceChart"></canvas>
+</div>
+</div>
+
+<h3>Response Distribution Across All Questions</h3>
+<div class="chartbox full">
+<h4>Likert Scale Response Distribution</h4>
+<canvas id="likertChart"></canvas>
+</div>
+
+<div id="findings" class="findings"></div>
+
+<h3>Detailed Response Tallies by Question</h3>
+<div class="tablewrap">
+<h4 style="padding:20px 20px 0">Question-by-Question Breakdown</h4>
+<div id="table"></div>
+</div>
+
+<div class="actions">
+<button id="json" class="btn secondary">⬇ Download JSON</button>
+<button id="csv" class="btn primary">⬇ Download CSV</button>
+</div>
+</div>
+</section>
+
+<section id="thanks" class="screen">
+<div class="card success">
+<div class="check">✓</div>
+<h2>Thank you for participating in this research study.</h2>
+<p style="color:var(--muted);font-size:1rem">Your contribution is valuable to understanding agile methodology's impact on ICT project performance in the Ministry of Transport, Kenya.</p>
+<div class="respondent-info">Respondent ID: <b id="rid">--</b></div>
+<p style="color:var(--muted);margin:16px 0"><small id="when">Completion Timestamp: --</small></p>
+<div class="actions" style="justify-content:center">
+<button id="downloadOne" class="btn primary">⬇ Download My Results</button>
+</div>
+</div>
+</section>
+</main>
+
+<footer><button id="adminButton" class="admin" aria-label="Administrator mode">Administrator mode</button></footer>
+<div id="modal" class="modal">
+<div class="modalbox">
+<h2>Administrator Dashboard</h2>
+<p style="color:var(--muted)">Aggregated survey data and distribution analysis</p>
+<div id="adminContent"></div>
+<div class="actions" style="justify-content:flex-end;margin-top:28px">
+<button id="closeAdmin" class="btn secondary">Close</button>
+</div>
+</div>
+</div>
+
+<script>
+const K={current:'agileSurveyCurrentResponse',all:'agileSurveyAggregateResponses'};
+const scale=[['1','Strongly Disagree'],['2','Disagree'],['3','Neutral'],['4','Agree'],['5','Strongly Agree']];
+const sections=[
+{id:'A',title:'Section A: Demographic Information',type:'demo',qs:[
+{id:'gender',label:'1. Gender',type:'radio',options:['Male','Female']},
+{id:'age',label:'2. Age',type:'radio',options:['20–29','30–39','40–49','50 and above']},
+{id:'job',label:'3. Job Description',type:'radio',options:['ICT Officer','Systems Analyst','Software Developer','Project Manager','Procurement Officer','Departmental Head','End-user Representative','Other (specify):']},
+{id:'experience',label:'4. Years of experience in ICT projects',type:'radio',options:['Less than 1 year','1–3 years','4–6 years','Over 6 years']},
+{id:'agileExperience',label:'5. Have you previously worked on a project using agile methodology?',type:'radio',options:['Yes','No']}
+]},
+{id:'B1',title:'B1. Stakeholder Collaboration',type:'agile',group:'Stakeholder Collaboration',qs:[
+'Our ICT projects frequently use sprints of about 4 weeks to divide work.','Teams use a prioritization method to manage project requirements.','Daily stand-up meetings are conducted to review progress.','Backlog grooming and refinement sessions are regularly conducted.','User stories are used to capture system requirements.','Deliverables are reviewed every month at the end of each sprint.']},
+{id:'B2',title:'B2. Cross-Functional Teams',type:'agile',group:'Cross Functional Teams',qs:[
+'Project teams collaborate closely throughout the project','Team members have lots of freedom in decision-making.','Communication among project members is frequent and transparent.','Cross-functional teams work together to deliver project outputs. e.g. developers and business analysts']},
+{id:'B3',title:'B3. Adaptive Planning',type:'agile',group:'Adaptive Planning',qs:[
+'Teams support the adoption of daily synchronization of tasks.','Tasks are divided into 4-week batches','Leadership maps out progress every cycle.']},
+{id:'B4',title:'B4. Continuous Improvement',type:'agile',group:'Continuous Improvement',qs:[
+'Teams meet at the end of each cycle to review progress','Teams conduct evaluations of quality.','Teams evaluate the operational workflow of projects.','Every team member actively engaged throughout the project']},
+{id:'C1',title:'C1. Schedule Performance',type:'performance',group:'Schedule Performance',qs:[
+'ICT projects are completed within the planned schedule.','Agile approaches help the team detect delays early.','Sprint reviews help the project stay on track.']},
+{id:'C2',title:'C2. Cost Performance',type:'performance',group:'Cost Performance',qs:[
+'ICT projects stay within the approved budget.','Agile approaches reduce unnecessary project costs.']},
+{id:'C3',title:'C3. Quality Performance',type:'performance',group:'Quality Performance',qs:[
+'The final ICT deliverables meet quality expectations.','Frequent testing during sprints improves overall system quality.','System defects are identified and resolved quickly.','End users are satisfied with the final ICT system delivered.','Users are involved throughout the development process.','The delivered systems meet user\'s needs and expectations.']}
+];
+let state={section:0,charts:{},response:null};
+const $=id=>document.getElementById(id);
+function id(){return 'RESP-'+Math.random().toString(36).slice(2,8).toUpperCase()+'-'+Date.now().toString().slice(-6)}
+function blank(){return{respondentId:id(),timestamp:new Date().toISOString(),demographics:{},agileResponses:{},performanceResponses:{}}}
+function load(){try{return JSON.parse(localStorage.getItem(K.current))||blank()}catch(e){return blank()}}
+function save(){localStorage.setItem(K.current,JSON.stringify(state.response))}
+function all(){try{return JSON.parse(localStorage.getItem(K.all))||[]}catch(e){return[]}}
+function screen(name){['welcome','survey','results','thanks'].forEach(x=>$(x).classList.toggle('active',x===name))}
+function render(){let s=sections[state.section];$('title').textContent=s.title;$('counter').textContent=`${state.section+1} / ${sections.length}`;$('bar').style.width=((state.section+1)/sections.length*100)+'%';let r=state.response;
+if(s.type==='demo'){$('questions').innerHTML=s.qs.map(q=>`<fieldset class="q"><legend>${q.label}</legend><div class="choices">${q.options.map(o=>`<label><input type="radio" name="${q.id}" value="${esc(o)}" ${r.demographics[q.id]===o?'checked':''}> ${o}</label>`).join('')}</div></fieldset>`).join('')}
+else{$('questions').innerHTML='<p class="notice"><strong>Likert Scale:</strong> 1 = Strongly Disagree | 2 = Disagree | 3 = Neutral | 4 = Agree | 5 = Strongly Agree</p>'+s.qs.map((text,i)=>{let qid=s.id+'_'+(i+1),v=(s.type==='agile'?r.agileResponses:r.performanceResponses)[qid];return`<div class="q"><label>${i+1}.) ${text}</label><div class="likert" role="radiogroup" aria-label="${esc(text)}">${scale.map(x=>`<button type="button" class="option ${v==x[0]?'selected':''}" data-q="${qid}" data-v="${x[0]}" aria-pressed="${v==x[0]}" title="${x[1]}"><strong>${x[0]}</strong><small>${x[1]}</small></button>`).join('')}</div></div>`}).join('')}
+$('back').style.visibility=state.section?'visible':'hidden';$('next').textContent=state.section===sections.length-1?'Submit Survey →':'Next →'}
+function esc(x){return String(x).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function valid(){let s=sections[state.section],r=state.response;if(s.type==='demo'){for(let q of s.qs)if(!r.demographics[q.id]){alert('Please complete: '+q.label);return false}}else for(let i=0;i<s.qs.length;i++){let q=s.id+'_'+(i+1),map=s.type==='agile'?r.agileResponses:r.performanceResponses;if(map[q]==null){alert('Please answer question '+(i+1)+' in '+s.title);return false}}return true}
+function scores(r){let groups={B1:['B1_1','B1_2','B1_3','B1_4','B1_5','B1_6'],B2:['B2_1','B2_2','B2_3','B2_4'],B3:['B3_1','B3_2','B3_3'],B4:['B4_1','B4_2','B4_3','B4_4'],C1:['C1_1','C1_2','C1_3'],C2:['C2_1','C2_2'],C3:['C3_1','C3_2','C3_3','C3_4','C3_5','C3_6']},out={};for(let [g,ids] of Object.entries(groups)){let map=g[0]==='B'?r.agileResponses:r.performanceResponses,v=ids.map(x=>+map[x]).filter(Number.isFinite);out[g]=v.length?v.reduce((a,b)=>a+b,0)/v.length:0}return{...out,agile:(out.B1+out.B2+out.B3+out.B4)/4,performance:(out.C1+out.C2+out.C3)/3}}
+function submit(){let data=all();let entry=JSON.parse(JSON.stringify(state.response));entry.timestamp=new Date().toISOString();data.push(entry);localStorage.setItem(K.all,JSON.stringify(data));$('rid').textContent=entry.respondentId;$('when').textContent='Completion Timestamp: '+new Date(entry.timestamp).toLocaleString();screen('results');dashboard()}
+function averages(data,key){return data.length?data.reduce((a,r)=>a+scores(r)[key],0)/data.length:0}
+function interpret(s){if(s>=4.5)return'Excellent';if(s>=4)return'High';if(s>=3.5)return'Moderate-High';if(s>=3)return'Moderate';if(s>=2)return'Low-Moderate';return'Low'}
+function dashboard(){let data=all(),current=state.response,rows=[...data,current],ag=averages(rows,'agile'),pe=averages(rows,'performance');$('summary').innerHTML=[['Total Responses',data.length,'submissions'],['Avg Agile Adoption Score',ag.toFixed(2),'out of 5'],['Avg ICT Performance Score',pe.toFixed(2),'out of 5'],['Completion Rate','100%','response submitted']].map(x=>`<div class="metric"><small>${x[0]}</small><strong>${x[1]}</strong><span>${x[2]}</span></div>`).join('');let s=scores(current);$('findings').innerHTML=`<h4>Key Findings</h4><ul><li><strong>Agile Adoption Score:</strong> ${s.agile.toFixed(2)}/5.0 - ${interpret(s.agile)} adoption of agile practices</li><li><strong>Project Performance Score:</strong> ${s.performance.toFixed(2)}/5.0 - ${interpret(s.performance)} project performance</li><li><strong>Stakeholder Collaboration:</strong> ${s.B1.toFixed(2)}/5.0</li><li><strong>Cross-Functional Teams:</strong> ${s.B2.toFixed(2)}/5.0</li><li><strong>Adaptive Planning:</strong> ${s.B3.toFixed(2)}/5.0</li><li><strong>Continuous Improvement:</strong> ${s.B4.toFixed(2)}/5.0</li><li><strong>Schedule Performance:</strong> ${s.C1.toFixed(2)}/5.0</li><li><strong>Cost Performance:</strong> ${s.C2.toFixed(2)}/5.0</li><li><strong>Quality Performance:</strong> ${s.C3.toFixed(2)}/5.0</li></ul>`;charts(rows);tally(rows)}
+function charts(rows){let groups=[['B1','Stakeholder Collaboration'],['B2','Cross Functional Teams'],['B3','Adaptive Planning'],['B4','Continuous Improvement']],pg=[['C1','Schedule Performance'],['C2','Cost Performance'],['C3','Quality Performance']],avg=(g)=>{let x=rows.map(r=>scores(r)[g[0]]);return x.reduce((a,b)=>a+b,0)/(x.length||1)};for(let k of Object.keys(state.charts))state.charts[k].destroy();const chartOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:5,ticks:{stepSize:1}}}};state.charts.agile=new Chart($('agileChart'),{type:'bar',data:{labels:groups.map(x=>x[1]),datasets:[{label:'Average Score',data:groups.map(avg),backgroundColor:['#0b466b','#1976a8','#4a9fd8','#7bb8d6']}]},options:chartOpts});state.charts.performance=new Chart($('performanceChart'),{type:'bar',data:{labels:pg.map(x=>x[1]),datasets:[{label:'Average Score',data:pg.map(avg),backgroundColor:['#188653','#4aad80','#7ecaa5']}]},options:chartOpts});let c=[1,2,3,4,5].map(v=>rows.reduce((n,r)=>n+[...Object.values(r.agileResponses),...Object.values(r.performanceResponses)].filter(x=>+x===v).length,0));state.charts.likert=new Chart($('likertChart'),{type:'doughnut',data:{labels:scale.map(x=>x[1]),datasets:[{data:c,backgroundColor:['#d35a57','#f0a630','#92cce6','#52b383','#0b466b'],borderColor:'#fff',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:15,usePointStyle:true}}}}})}
+function tally(rows){let out=[];sections.filter(s=>s.type!=='demo').forEach(s=>s.qs.forEach((text,i)=>{let q=s.id+'_'+(i+1),c=[1,2,3,4,5].map(v=>rows.reduce((n,r)=>n+([...(s.type==='agile'?Object.entries(r.agileResponses):Object.entries(r.performanceResponses))].filter(x=>x[0]===q&&+x[1]===v).length),0));out.push(`<tr><td>${text}</td>${c.map(x=>`<td>${x}</td>`).join('')}</tr>`)}));$('table').innerHTML='<table><thead><tr><th>Question</th><th>Strongly Disagree</th><th>Disagree</th><th>Neutral</th><th>Agree</th><th>Strongly Agree</th></tr></thead><tbody>'+out.join('')+'</tbody></table>'}
+function download(type,one=false){let data=one?[state.response]:all(),payload=data.map(r=>({...r,scores:scores(r)})),blob;if(type==='json')blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});else{let head=['Respondent ID','Timestamp','Gender','Age','Job Description','Years of experience in ICT projects','Previous agile experience',...Object.keys(payload[0].agileResponses),...Object.keys(payload[0].performanceResponses),'Scores'];let lines=[head.join(',')];payload.forEach(r=>lines.push([r.respondentId,r.timestamp,...Object.values(r.demographics),...Object.values(r.agileResponses),...Object.values(r.performanceResponses),JSON.stringify(r.scores)].map(x=>`"${String(x??'').replace(/"/g,'""')}"`).join(',')));blob=new Blob([lines.join('\n')],{type:'text/csv'})}let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=one?'survey-response.'+type:'survey-responses.'+type;a.click()}
+function admin(){if(prompt('Enter administrator password:')!=='admin123')return alert('Incorrect password. Access denied.');let d=all(),count=(key)=>d.reduce((o,r)=>{let x=r.demographics[key]||'Unknown';o[x]=(o[x]||0)+1;return o},{}),g=count('gender'),a=count('age'),j=count('job'),ex=count('experience'),ag=count('agileExperience');$('adminContent').innerHTML=`<div class="stats"><div class="stat"><small>Total respondents</small><b>${d.length}</b></div><div class="stat"><small>Average Agile Score</small><b>${averages(d,'agile').toFixed(2)}</b></div><div class="stat"><small>Average Performance Score</small><b>${averages(d,'performance').toFixed(2)}</b></div><div class="stat"><small>Survey completion rate</small><b>100%</b></div></div><h3>Gender Distribution</h3><div>${Object.entries(g).map(([k,v])=>`<div class="dist"><strong>${k}:</strong> ${v} respondent${v!==1?'s':''}</div>`).join('')}</div><h3>Age Distribution</h3><div>${Object.entries(a).map(([k,v])=>`<div class="dist"><strong>${k}:</strong> ${v} respondent${v!==1?'s':''}</div>`).join('')}</div><h3>Job Categories</h3><div>${Object.entries(j).map(([k,v])=>`<div class="dist"><strong>${k}:</strong> ${v} respondent${v!==1?'s':''}</div>`).join('')}</div><h3>Years of Experience</h3><div>${Object.entries(ex).map(([k,v])=>`<div class="dist"><strong>${k}:</strong> ${v} respondent${v!==1?'s':''}</div>`).join('')}</div><h3>Agile Methodology Experience</h3><div>${Object.entries(ag).map(([k,v])=>`<div class="dist"><strong>${k}:</strong> ${v} respondent${v!==1?'s':''}</div>`).join('')}</div><div class="actions" style="margin-top:20px"><button id="adminDownload" class="btn primary">⬇ Download All Responses</button><button id="clear" class="btn secondary">🗑 Clear All Data</button></div>`;$('adminDownload').onclick=()=>download('json');$('clear').onclick=()=>{if(confirm('Permanently clear all stored survey data? This cannot be undone.')){localStorage.removeItem(K.all);alert('All stored survey data has been cleared.');$('modal').classList.remove('open')}};$('modal').classList.add('open')}
+$('start').onclick=()=>{screen('survey');render()};
+$('back').onclick=()=>{if(state.section){state.section--;render()}};
+$('next').onclick=()=>{if(!valid())return;if(state.section<sections.length-1){state.section++;save();render()}else submit()};
+$('questions').onchange=e=>{if(e.target.name){state.response.demographics[e.target.name]=e.target.value;save()}};
+$('questions').onclick=e=>{let b=e.target.closest('.option');if(!b)return;let s=sections[state.section],map=s.type==='agile'?state.response.agileResponses:state.response.performanceResponses;map[b.dataset.q]=+b.dataset.v;b.parentElement.querySelectorAll('.option').forEach(x=>{let yes=x===b;x.classList.toggle('selected',yes);x.setAttribute('aria-pressed',yes)});save()};
+$('json').onclick=()=>download('json');
+$('csv').onclick=()=>download('csv');
+$('downloadOne').onclick=()=>download('json',true);
+$('adminButton').onclick=admin;
+$('closeAdmin').onclick=()=>$('modal').classList.remove('open');
+state.response=load();
+</script>
+</body>
 </html>
