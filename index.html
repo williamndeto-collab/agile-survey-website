@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Agile Methodology and Project Performance on ICT Projects in the Ministry of Transport, Kenya questionnaire">
 <title>Agile Methodology and ICT Project Performance Survey</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root{--navy:#0b466b;--blue:#1976a8;--light:#edf5fa;--lighter:#f8fbfd;--ink:#1d2a36;--muted:#637383;--white:#fff;--green:#188653;--red:#c84d57;--orange:#e5a629;--yellow:#ffd966;--gray:#95a3b3;--shadow:0 12px 32px rgba(17,59,83,0.15);--radius:18px;--transition:0.3s ease}
 *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
@@ -59,11 +58,6 @@ h4{font-size:1.05rem;color:var(--ink);margin:16px 0 10px;font-weight:700}
 .metric small{color:var(--muted);display:block;text-transform:uppercase;font-size:0.75rem;font-weight:700;letter-spacing:0.08em;margin-bottom:8px}
 .metric strong{display:block;color:var(--navy);font-size:2rem;margin:8px 0;font-weight:800}
 .metric span{color:var(--gray);font-size:0.9rem;line-height:1.5}
-.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:22px;margin:32px 0}
-.chartbox{background:var(--white);border:1px solid rgba(11,70,107,0.08);border-radius:16px;padding:20px;min-height:360px;display:flex;flex-direction:column;box-shadow:0 4px 12px rgba(11,70,107,0.06)}
-.chartbox h4{margin:0 0 16px 0;color:var(--navy)}
-.chartbox canvas{flex:1!important;position:relative;height:auto!important}
-.chartbox.full{grid-column:1/-1}
 .findings{background:linear-gradient(135deg,#f0f8f3 0%,#e8f5f0 100%);border-left:5px solid var(--green);border-radius:14px;padding:24px;margin:32px 0;border-top:1px solid rgba(24,134,83,0.1)}
 .findings h4{color:var(--green);margin-top:0}
 .findings ul{margin:12px 0;padding-left:20px}
@@ -94,7 +88,7 @@ footer{text-align:right;padding:16px 5%}
 .stat b{display:block;font-size:1.8rem;color:var(--navy);font-weight:800}
 .dist{background:var(--lighter);border-radius:10px;padding:14px;margin:10px 0;font-size:0.95rem}
 .dist strong{color:var(--navy);font-weight:700}
-@media(max-width:900px){.summary{grid-template-columns:repeat(2,1fr)}.charts{grid-template-columns:1fr}.chartbox.full{grid-column:auto}}
+@media(max-width:900px){.summary{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){
 .summary{grid-template-columns:1fr}
 .likert{grid-template-columns:1fr}
@@ -150,24 +144,6 @@ th,td{padding:10px 12px;font-size:0.85rem}
 <p class="eyebrow">Analysis & Results</p>
 <h2>Your Survey Results Dashboard</h2>
 <div id="summary" class="summary"></div>
-
-<h3 style="margin-top:40px">Agile Adoption Scores</h3>
-<div class="charts">
-<div class="chartbox">
-<h4>Agile Methodology Adoption</h4>
-<canvas id="agileChart"></canvas>
-</div>
-<div class="chartbox">
-<h4>ICT Project Performance</h4>
-<canvas id="performanceChart"></canvas>
-</div>
-</div>
-
-<h3>Response Distribution Across All Questions</h3>
-<div class="chartbox full">
-<h4>Likert Scale Response Distribution</h4>
-<canvas id="likertChart"></canvas>
-</div>
 
 <div id="findings" class="findings"></div>
 
@@ -236,7 +212,7 @@ const sections=[
 {id:'C3',title:'C3. Quality Performance',type:'performance',group:'Quality Performance',qs:[
 'The final ICT deliverables meet quality expectations.','Frequent testing during sprints improves overall system quality.','System defects are identified and resolved quickly.','End users are satisfied with the final ICT system delivered.','Users are involved throughout the development process.','The delivered systems meet user\'s needs and expectations.']}
 ];
-let state={section:0,charts:{},response:null};
+let state={section:0,response:null};
 const $=id=>document.getElementById(id);
 function id(){return 'RESP-'+Math.random().toString(36).slice(2,8).toUpperCase()+'-'+Date.now().toString().slice(-6)}
 function blank(){return{respondentId:id(),timestamp:new Date().toISOString(),demographics:{},agileResponses:{},performanceResponses:{}}}
@@ -254,8 +230,7 @@ function scores(r){let groups={B1:['B1_1','B1_2','B1_3','B1_4','B1_5','B1_6'],B2
 function submit(){let data=all();let entry=JSON.parse(JSON.stringify(state.response));entry.timestamp=new Date().toISOString();data.push(entry);localStorage.setItem(K.all,JSON.stringify(data));$('rid').textContent=entry.respondentId;$('when').textContent='Completion Timestamp: '+new Date(entry.timestamp).toLocaleString();screen('results');dashboard()}
 function averages(data,key){return data.length?data.reduce((a,r)=>a+scores(r)[key],0)/data.length:0}
 function interpret(s){if(s>=4.5)return'Excellent';if(s>=4)return'High';if(s>=3.5)return'Moderate-High';if(s>=3)return'Moderate';if(s>=2)return'Low-Moderate';return'Low'}
-function dashboard(){let data=all(),current=state.response,rows=[...data,current],ag=averages(rows,'agile'),pe=averages(rows,'performance');$('summary').innerHTML=[['Total Responses',data.length,'submissions'],['Avg Agile Adoption Score',ag.toFixed(2),'out of 5'],['Avg ICT Performance Score',pe.toFixed(2),'out of 5'],['Completion Rate','100%','response submitted']].map(x=>`<div class="metric"><small>${x[0]}</small><strong>${x[1]}</strong><span>${x[2]}</span></div>`).join('');let s=scores(current);$('findings').innerHTML=`<h4>Key Findings</h4><ul><li><strong>Agile Adoption Score:</strong> ${s.agile.toFixed(2)}/5.0 - ${interpret(s.agile)} adoption of agile practices</li><li><strong>Project Performance Score:</strong> ${s.performance.toFixed(2)}/5.0 - ${interpret(s.performance)} project performance</li><li><strong>Stakeholder Collaboration:</strong> ${s.B1.toFixed(2)}/5.0</li><li><strong>Cross-Functional Teams:</strong> ${s.B2.toFixed(2)}/5.0</li><li><strong>Adaptive Planning:</strong> ${s.B3.toFixed(2)}/5.0</li><li><strong>Continuous Improvement:</strong> ${s.B4.toFixed(2)}/5.0</li><li><strong>Schedule Performance:</strong> ${s.C1.toFixed(2)}/5.0</li><li><strong>Cost Performance:</strong> ${s.C2.toFixed(2)}/5.0</li><li><strong>Quality Performance:</strong> ${s.C3.toFixed(2)}/5.0</li></ul>`;charts(rows);tally(rows)}
-function charts(rows){let groups=[['B1','Stakeholder Collaboration'],['B2','Cross Functional Teams'],['B3','Adaptive Planning'],['B4','Continuous Improvement']],pg=[['C1','Schedule Performance'],['C2','Cost Performance'],['C3','Quality Performance']],avg=(g)=>{let x=rows.map(r=>scores(r)[g[0]]);return x.reduce((a,b)=>a+b,0)/(x.length||1)};for(let k of Object.keys(state.charts))state.charts[k].destroy();const chartOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:5,ticks:{stepSize:1}}}};state.charts.agile=new Chart($('agileChart'),{type:'bar',data:{labels:groups.map(x=>x[1]),datasets:[{label:'Average Score',data:groups.map(avg),backgroundColor:['#0b466b','#1976a8','#4a9fd8','#7bb8d6']}]},options:chartOpts});state.charts.performance=new Chart($('performanceChart'),{type:'bar',data:{labels:pg.map(x=>x[1]),datasets:[{label:'Average Score',data:pg.map(avg),backgroundColor:['#188653','#4aad80','#7ecaa5']}]},options:chartOpts});let c=[1,2,3,4,5].map(v=>rows.reduce((n,r)=>n+[...Object.values(r.agileResponses),...Object.values(r.performanceResponses)].filter(x=>+x===v).length,0));state.charts.likert=new Chart($('likertChart'),{type:'doughnut',data:{labels:scale.map(x=>x[1]),datasets:[{data:c,backgroundColor:['#d35a57','#f0a630','#92cce6','#52b383','#0b466b'],borderColor:'#fff',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:15,usePointStyle:true}}}}})}
+function dashboard(){let data=all(),current=state.response,rows=[...data,current],ag=averages(rows,'agile'),pe=averages(rows,'performance');$('summary').innerHTML=[['Total Responses',data.length,'submissions'],['Avg Agile Adoption Score',ag.toFixed(2),'out of 5'],['Avg ICT Performance Score',pe.toFixed(2),'out of 5'],['Completion Rate','100%','response submitted']].map(x=>`<div class="metric"><small>${x[0]}</small><strong>${x[1]}</strong><span>${x[2]}</span></div>`).join('');let s=scores(current);$('findings').innerHTML=`<h4>Key Findings</h4><ul><li><strong>Agile Adoption Score:</strong> ${s.agile.toFixed(2)}/5.0 - ${interpret(s.agile)} adoption of agile practices</li><li><strong>Project Performance Score:</strong> ${s.performance.toFixed(2)}/5.0 - ${interpret(s.performance)} project performance</li><li><strong>Stakeholder Collaboration:</strong> ${s.B1.toFixed(2)}/5.0</li><li><strong>Cross-Functional Teams:</strong> ${s.B2.toFixed(2)}/5.0</li><li><strong>Adaptive Planning:</strong> ${s.B3.toFixed(2)}/5.0</li><li><strong>Continuous Improvement:</strong> ${s.B4.toFixed(2)}/5.0</li><li><strong>Schedule Performance:</strong> ${s.C1.toFixed(2)}/5.0</li><li><strong>Cost Performance:</strong> ${s.C2.toFixed(2)}/5.0</li><li><strong>Quality Performance:</strong> ${s.C3.toFixed(2)}/5.0</li></ul>`;tally(rows)}
 function tally(rows){let out=[];sections.filter(s=>s.type!=='demo').forEach(s=>s.qs.forEach((text,i)=>{let q=s.id+'_'+(i+1),c=[1,2,3,4,5].map(v=>rows.reduce((n,r)=>n+([...(s.type==='agile'?Object.entries(r.agileResponses):Object.entries(r.performanceResponses))].filter(x=>x[0]===q&&+x[1]===v).length),0));out.push(`<tr><td>${text}</td>${c.map(x=>`<td>${x}</td>`).join('')}</tr>`)}));$('table').innerHTML='<table><thead><tr><th>Question</th><th>Strongly Disagree</th><th>Disagree</th><th>Neutral</th><th>Agree</th><th>Strongly Agree</th></tr></thead><tbody>'+out.join('')+'</tbody></table>'}
 function download(type,one=false){let data=one?[state.response]:all(),payload=data.map(r=>({...r,scores:scores(r)})),blob;if(type==='json')blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});else{let head=['Respondent ID','Timestamp','Gender','Age','Job Description','Years of experience in ICT projects','Previous agile experience',...Object.keys(payload[0].agileResponses),...Object.keys(payload[0].performanceResponses),'Scores'];let lines=[head.join(',')];payload.forEach(r=>lines.push([r.respondentId,r.timestamp,...Object.values(r.demographics),...Object.values(r.agileResponses),...Object.values(r.performanceResponses),JSON.stringify(r.scores)].map(x=>`"${String(x??'').replace(/"/g,'""')}"`).join(',')));blob=new Blob([lines.join('\n')],{type:'text/csv'})}let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=one?'survey-response.'+type:'survey-responses.'+type;a.click()}
 function admin(){if(prompt('Enter administrator password:')!=='admin123')return alert('Incorrect password. Access denied.');let d=all(),count=(key)=>d.reduce((o,r)=>{let x=r.demographics[key]||'Unknown';o[x]=(o[x]||0)+1;return o},{}),g=count('gender'),a=count('age'),j=count('job'),ex=count('experience'),ag=count('agileExperience');$('adminContent').innerHTML=`<div class="stats"><div class="stat"><small>Total respondents</small><b>${d.length}</b></div><div class="stat"><small>Average Agile Score</small><b>${averages(d,'agile').toFixed(2)}</b></div><div class="stat"><small>Average Performance Score</small><b>${averages(d,'performance').toFixed(2)}</b></div><div class="stat"><small>Survey completion rate</small><b>100%</b></div></div><h3>Gender Distribution</h3><div>${Object.entries(g).map(([k,v])=>`<div class="dist"><strong>${k}:</strong> ${v} respondent${v!==1?'s':''}</div>`).join('')}</div><h3>Age Distribution</h3><div>${Object.entries(a).map(([k,v])=>`<div class="dist"><strong>${k}:</strong> ${v} respondent${v!==1?'s':''}</div>`).join('')}</div><h3>Job Categories</h3><div>${Object.entries(j).map(([k,v])=>`<div class="dist"><strong>${k}:</strong> ${v} respondent${v!==1?'s':''}</div>`).join('')}</div><h3>Years of Experience</h3><div>${Object.entries(ex).map(([k,v])=>`<div class="dist"><strong>${k}:</strong> ${v} respondent${v!==1?'s':''}</div>`).join('')}</div><h3>Agile Methodology Experience</h3><div>${Object.entries(ag).map(([k,v])=>`<div class="dist"><strong>${k}:</strong> ${v} respondent${v!==1?'s':''}</div>`).join('')}</div><div class="actions" style="margin-top:20px"><button id="adminDownload" class="btn primary">⬇ Download All Responses</button><button id="clear" class="btn secondary">🗑 Clear All Data</button></div>`;$('adminDownload').onclick=()=>download('json');$('clear').onclick=()=>{if(confirm('Permanently clear all stored survey data? This cannot be undone.')){localStorage.removeItem(K.all);alert('All stored survey data has been cleared.');$('modal').classList.remove('open')}};$('modal').classList.add('open')}
